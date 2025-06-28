@@ -25,4 +25,10 @@ mongoDB()
     console.log('err while connecting to DB', err)
 })
 
+
+// routes
+import userRoute from './routes/user.route.js'
+
+app.use('/api/v1/user', userRoute)
+
 export {app}
