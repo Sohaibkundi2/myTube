@@ -157,29 +157,27 @@ const loginUser = asyncHandler(async (req, res) => {
     )
 })
 
-const logoutUser = asyncHandler(async(req, res)=>{
-    await User.findByIdAndUpdate(
-     req.user._id,
+const logoutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
     {
       refreshToken: null,
     },
     {
       new: true,
-    }
-    )
+    },
+  )
 
-    const options ={
-      httpOnly:true,
-      secure:process.env.NODE_ENV ==="production",
-    }
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+  }
 
-    res
+  res
     .status(200)
-    .clearCookie("accessToken",options)
-    .clearCookie("refreshToken",options)
-    .json(
-      new ApiResponse(200, {}, "user logout successfully")
-    )
+    .clearCookie('accessToken', options)
+    .clearCookie('refreshToken', options)
+    .json(new ApiResponse(200, {}, 'user logout successfully'))
 })
 
 const generateAccessRefreshToken = asyncHandler(async (req, res) => {
@@ -221,19 +219,49 @@ const generateAccessRefreshToken = asyncHandler(async (req, res) => {
       .json(
         new ApiResponse(
           200,
-          {  accessToken, 
-            refreshToken: newRefreshToken
-        },
+          { accessToken, refreshToken: newRefreshToken },
           'New access and refresh token generated successfully',
         ),
       )
   } catch (error) {
-    throw new ApiError(500, "something went wrong while creating access and refresh token ")
+    throw new ApiError(
+      500,
+      'something went wrong while creating access and refresh token ',
+    )
   }
 })
 
-export { registerUser,
-     loginUser,
-     generateAccessRefreshToken, 
-     logoutUser
-    }
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body
+
+  const user = await User.findById(req.user?._id)
+
+  const isPasswordValid = await user.isPasswordCorrect(oldPassword)
+
+  if (!isPasswordValid) {
+    throw new ApiError(402, 'invalid old password')
+  }
+
+  user.password = newPassword
+
+  await user.save({ validateBeforeSave: false })
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, 'password change successfully'))
+})
+
+const getCurrentUser = asyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiResponse(200, req.user, 'Current user details'));
+});
+
+export {
+  registerUser,
+  loginUser,
+  generateAccessRefreshToken,
+  logoutUser,
+  changeCurrentPassword,
+  getCurrentUser
+}
