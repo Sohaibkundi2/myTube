@@ -254,8 +254,82 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiResponse(200, req.user, 'Current user details'));
-});
+    .json(new ApiResponse(200, req.user, 'Current user details'))
+})
+
+const changeAccountDetails = asyncHandler(async (req, res) => {
+  const { fullName, email } = req.body
+
+  if (!fullName && !email) {
+    throw new ApiError(401, 'all fields are required')
+  }
+
+  const user = await User.findByIdAndUpdate(req.user._id, {
+    $set: {
+      fullName,
+      email,
+    },
+  }).select('-password')
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, 'account details updated successfuly'))
+})
+
+const updateAvatarImage = asyncHandler(async (req, res) => {
+  const localFilePath = req?.file?.path
+
+  if (!localFilePath) {
+    throw new ApiError(401, 'new avatar is missing')
+  }
+
+  const avatar = await uploadOnCloudinary(localFilePath)
+
+  if (!avatar) {
+    throw new ApiError(500, 'error while uploading image on cloadinary')
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        avatar: avatar.url,
+      },
+    },
+    { new: true },
+  ).select('-password -refreshToken')
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, 'avatar image update sucessfully'))
+})
+const updateLocalFilePath = asyncHandler(async (req, res) => {
+  const localFilePath = req?.file?.path
+
+  if (!localFilePath) {
+    throw new ApiError(401, 'new coverImage is missing')
+  }
+
+  const coverImage = await uploadOnCloudinary(localFilePath)
+
+  if (!coverImage) {
+    throw new ApiError(500, 'error while uploading image on cloadinary')
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        coverImage: coverImage.url,
+      },
+    },
+    { new: true },
+  ).select('-password', 'refreshToken')
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, 'coverImage image update sucessfully'))
+})
 
 export {
   registerUser,
@@ -263,5 +337,8 @@ export {
   generateAccessRefreshToken,
   logoutUser,
   changeCurrentPassword,
-  getCurrentUser
+  getCurrentUser,
+  changeAccountDetails,
+  updateAvatarImage,
+  updateLocalFilePath
 }
