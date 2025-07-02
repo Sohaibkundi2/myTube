@@ -331,6 +331,84 @@ const updateLocalFilePath = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, 'coverImage image update sucessfully'))
 })
 
+const getUserChannelProfile = asyncHandler(async (req, res) => {
+  const { username } = req.params
+
+  if (!username.trim()) {
+    throw new ApiError(401, 'username is missing')
+  }
+
+  const channel = await User.aggregate([
+    {
+      $match: {
+        username: username.toLowerCase(),
+      },
+    },
+    {
+      $lookup: {
+        from: 'subscriptions',
+        localField: '_id',
+        foreignField: 'channel',
+        as: 'subscribers',
+      },
+    },
+    {
+      $lookup: {
+        from: 'subscriptions',
+        localField: '_id',
+        foreignField: 'subscriber',
+        as: 'subscribedTo',
+      },
+    },
+    {
+      $addFields: {
+        subscribersToCount: {
+          size: '$subscribers',
+        },
+        channelSubcribedToCount: {
+          size: '$subscribedTo',
+        },
+        isSubscribed: {
+          $cond: {
+            if: {
+              $in: [
+                req.user._id,
+                {
+                  $map: {
+                    input: '$subscribers',
+                    as: 's',
+                    in: '$$s.subscriber',
+                  },
+                },
+              ],
+            },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        username: 1,
+        fullName: 1,
+        email: 1,
+        avatar: 1,
+        coverImage: 1,
+        subscribersToCount: 1,
+        channelSubcribedToCount: 1,
+        isSubscribed: 1,
+      },
+    },
+  ])
+
+  console.log('channel checking...........', channel)
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, channel[0], 'user channel fetched successfully'))
+})
+
 export {
   registerUser,
   loginUser,
@@ -340,5 +418,6 @@ export {
   getCurrentUser,
   changeAccountDetails,
   updateAvatarImage,
-  updateLocalFilePath
+  updateLocalFilePath,
+  getUserChannelProfile
 }
