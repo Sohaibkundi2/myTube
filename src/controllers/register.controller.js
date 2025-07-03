@@ -6,7 +6,7 @@ import {
   uploadOnCloudinary,
 } from '../utils/cloudinary.js'
 import { ApiResponse } from '../utils/ApiResponce.js'
-import { jwt } from 'jsonwebtoken'
+import  jwt  from 'jsonwebtoken'
 import mongoose from 'mongoose'
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -270,7 +270,7 @@ const changeAccountDetails = asyncHandler(async (req, res) => {
       fullName,
       email,
     },
-  }).select('-password')
+  }, { new: true }).select('-password')
 
   return res
     .status(200)
@@ -304,7 +304,7 @@ const updateAvatarImage = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, 'avatar image update sucessfully'))
 })
-const updateLocalFilePath = asyncHandler(async (req, res) => {
+const updateCoverImage = asyncHandler(async (req, res) => {
   const localFilePath = req?.file?.path
 
   if (!localFilePath) {
@@ -325,7 +325,7 @@ const updateLocalFilePath = asyncHandler(async (req, res) => {
       },
     },
     { new: true },
-  ).select('-password', 'refreshToken')
+  ).select('-password -refreshToken')
 
   return res
     .status(200)
@@ -483,7 +483,7 @@ export {
   getCurrentUser,
   changeAccountDetails,
   updateAvatarImage,
-  updateLocalFilePath,
+  updateCoverImage,
   getUserChannelProfile,
   getWatchHistory,
 }
