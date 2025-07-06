@@ -1,8 +1,8 @@
 import mongoose, { isValidObjectId } from 'mongoose'
 import { Video } from '../models/video.model.js'
 import { User } from '../models/user.model.js'
-import { ApiError } from '../utils/ApiError.js'
-import { ApiResponse } from '../utils/ApiResponse.js'
+import ApiError from '../utils/ApiError.js'
+import {ApiResponse} from '../utils/ApiResponce.js'
 import { asyncHandler } from '../utils/asyncHandler.js'
 import { uploadOnCloudinary } from '../utils/cloudinary.js'
 
@@ -14,54 +14,64 @@ const getAllVideos = asyncHandler(async (req, res) => {
     sortBy = 'createdAt',
     sortType = 'desc',
     userId,
-  } = req.query
-
+  } = req.query;
 
   const filter = {
     isPublished: true,
-  }
+  };
 
   if (query) {
-    filter.title = { $regex: query, $options: 'i' } // case-insensitive search on title
+    filter.$or = [
+      { title: { $regex: query, $options: 'i' } },
+      { description: { $regex: query, $options: 'i' } },
+    ];
   }
 
-  try {
-    if (userId) {
-      filter.owner = new mongoose.Types.ObjectId(userId)
+  if (userId) {
+    try {
+      filter.owner = new mongoose.Types.ObjectId(userId);
+    } catch (error) {
+      throw new ApiError(400, 'Invalid user ID');
     }
-  } catch (error) {
-    throw new ApiError(400, 'Invalid user ID')
   }
 
-  const skip = (page - 1) * limit
-const sortOption = {};
-sortOption[sortBy] = sortType === "asc" ? 1 : -1;
+  const sort = {};
+  sort[sortBy] = sortType === 'asc' ? 1 : -1;
 
-  const videos = await Video.find(filter)
-    .sort(sortOption)
-    .skip(skip)
-    .limit(parseInt(limit))
-    .populate('owner', 'username fullName avatar')
+  const aggregate = Video.aggregate([
+    { $match: filter },
+    { $sort: sort },
+  ]);
 
-  const totalCount = await Video.countDocuments(filter)
+  const options = {
+    page: parseInt(page),
+    limit: parseInt(limit),
+    populate: {
+      path: 'owner',
+      select: 'username fullName avatar',
+    },
+  };
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        { videos, totalCount, page: Number(page), limit: Number(limit) },
-        'Videos fetched successfully',
-      ),
-    )
-})
+  const result = await Video.aggregatePaginate(aggregate, options);
+
+  return res.status(200).json(
+    new ApiResponse(200, {
+      videos: result.docs,
+      totalCount: result.totalDocs,
+      totalPages: result.totalPages,
+      page: result.page,
+      limit: result.limit,
+    }, "Videos fetched successfully")
+  );
+});
+
 
 const publishAVideo = asyncHandler(async (req, res) => {
-  const { title, description } = req.body
-  
-  if (!title || !description) {
-    throw new ApiError(400, "Title and description are required");
-  }
+const { title, description } = req.body || {};
+
+if (!title || !description) {
+  throw new ApiError(400, "Title and description are required");
+}
   const existingVideo = await Video.findOne({
         $or:[{title},{description}]
   })
@@ -95,7 +105,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
     description,
     videoFile: videoFileUrl?.url,
     thumbnail: thumbnailUrl?.url,
-    duration: Math.round(videoFileUrl?.duration) + ' sec',
+    duration: Math.round(videoFileUrl?.duration),
     owner: req.user?._id,
   })
 
