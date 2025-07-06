@@ -28,7 +28,9 @@ mongoDB()
 
 // routes
 import userRoute from './routes/user.route.js'
+import tweetRoute from './routes/tweet.route.js'
 
 app.use('/api/v1/users', userRoute)
+app.use('/api/v1/tweets', tweetRoute)
 
 export {app}
