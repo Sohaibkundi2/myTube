@@ -23,8 +23,25 @@ const likeSchema = new Schema(
   { timestamps: true },
 )
 
-likeSchema.index({ likedBy: 1, comment: 1 }, { unique: true, sparse: true });
-likeSchema.index({ likedBy: 1, video: 1 }, { unique: true, sparse: true });
-likeSchema.index({ likedBy: 1, tweet: 1 }, { unique: true, sparse: true });
+likeSchema.pre('validate', function (next) {
+  const targets = [this.video, this.comment, this.tweet].filter(Boolean)
+  if (targets.length !== 1) {
+    return next(new Error("A like must reference exactly one of video, comment, or tweet."))
+  }
+  next()
+})
+
+likeSchema.index(
+  { likedBy: 1, video: 1 },
+  { unique: true, partialFilterExpression: { video: { $exists: true } } }
+)
+likeSchema.index(
+  { likedBy: 1, comment: 1 },
+  { unique: true, partialFilterExpression: { comment: { $exists: true } } }
+)
+likeSchema.index(
+  { likedBy: 1, tweet: 1 },
+  { unique: true, partialFilterExpression: { tweet: { $exists: true } } }
+)
 
 export const Like = mongoose.model('Like', likeSchema)

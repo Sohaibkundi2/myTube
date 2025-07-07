@@ -1,115 +1,100 @@
-import mongoose, { isValidObjectId } from 'mongoose'
+import mongoose from 'mongoose'
 import { Like } from '../models/like.model.js'
-import { ApiError } from '../utils/ApiError.js'
-import { ApiResponse } from '../utils/ApiResponse.js'
+import ApiError from '../utils/ApiError.js'
+import { ApiResponse } from '../utils/ApiResponce.js'
 import { asyncHandler } from '../utils/asyncHandler.js'
 
+// Toggle Video Like
 const toggleVideoLike = asyncHandler(async (req, res) => {
-  const { videoId } = req.params || {}
+  const { videoId } = req.params
 
-  if (!videoId) {
-    throw new ApiError(400, 'video id is missing')
-  }
-  if (!mongoose.Types.ObjectId.isValid(videoId)) {
-    throw new ApiError(401, 'invalid video id')
-  }
-  let alreadyLiked = await Like.findOne({
+  if (!videoId) throw new ApiError(400, 'Video ID is missing')
+  if (!mongoose.Types.ObjectId.isValid(videoId)) throw new ApiError(400, 'Invalid video ID')
+
+  const existingLike = await Like.findOne({
     video: videoId,
-    likedBy: req.user?._id,
+    likedBy: req.user._id,
   })
 
-  if (alreadyLiked) {
-    await alreadyLiked.deleteOne()
-
-    return res
-      .status(200)
-      .json(new ApiResponse(200, null, 'Like removed from video'))
+  if (existingLike) {
+    await existingLike.deleteOne()
+    return res.status(200).json(new ApiResponse(200, null, 'Like removed from video'))
   }
 
-  const newLike = await Like.create({
+  const newLike = new Like({
+    likedBy: req.user._id,
     video: videoId,
-    likedBy: req.user?._id,
   })
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, newLike, 'video liked successfully'))
+  newLike.comment = undefined
+  newLike.tweet = undefined
+  await newLike.save()
+
+  return res.status(200).json(new ApiResponse(200, newLike, 'Video liked successfully'))
 })
 
+// Toggle Comment Like
 const toggleCommentLike = asyncHandler(async (req, res) => {
-  const { commentId } = req.params || {}
+  const { commentId } = req.params
 
-  if (!commentId) {
-    throw new ApiError(400, 'Comment ID is missing')
-  }
-
-  if (!mongoose.Types.ObjectId.isValid(commentId)) {
-    throw new ApiError(400, 'Invalid comment ID')
-  }
+  if (!commentId) throw new ApiError(400, 'Comment ID is missing')
+  if (!mongoose.Types.ObjectId.isValid(commentId)) throw new ApiError(400, 'Invalid comment ID')
 
   const existingLike = await Like.findOne({
     comment: commentId,
-    likedBy: req.user?._id,
+    likedBy: req.user._id,
   })
 
   if (existingLike) {
     await existingLike.deleteOne()
-
-    return res
-      .status(200)
-      .json(new ApiResponse(200, null, 'Like removed from comment'))
+    return res.status(200).json(new ApiResponse(200, null, 'Like removed from comment'))
   }
 
-  const newLike = await Like.create({
+  const newLike = new Like({
+    likedBy: req.user._id,
     comment: commentId,
-    likedBy: req.user?._id,
   })
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, newLike, 'Comment liked successfully'))
+  newLike.video = undefined
+  newLike.tweet = undefined
+  await newLike.save()
+
+  return res.status(200).json(new ApiResponse(200, newLike, 'Comment liked successfully'))
 })
 
+// Toggle Tweet Like
 const toggleTweetLike = asyncHandler(async (req, res) => {
-  const { tweetId } = req.params || {}
+  const { tweetId } = req.params
 
-  if (!tweetId) {
-    throw new ApiError(400, 'tweet ID is missing')
-  }
-
-  if (!mongoose.Types.ObjectId.isValid(tweetId)) {
-    throw new ApiError(400, 'Invalid tweet ID')
-  }
+  if (!tweetId) throw new ApiError(400, 'Tweet ID is missing')
+  if (!mongoose.Types.ObjectId.isValid(tweetId)) throw new ApiError(400, 'Invalid tweet ID')
 
   const existingLike = await Like.findOne({
     tweet: tweetId,
-    likedBy: req.user?._id,
+    likedBy: req.user._id,
   })
 
   if (existingLike) {
     await existingLike.deleteOne()
-
-    return res
-      .status(200)
-      .json(new ApiResponse(200, null, 'Like removed from tweet'))
+    return res.status(200).json(new ApiResponse(200, null, 'Like removed from tweet'))
   }
 
-  const newLike = await Like.create({
+  const newLike = new Like({
+    likedBy: req.user._id,
     tweet: tweetId,
-    likedBy: req.user?._id,
   })
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, newLike, 'tweet liked successfully'))
+  newLike.video = undefined
+  newLike.comment = undefined
+  await newLike.save()
+
+  return res.status(200).json(new ApiResponse(200, newLike, 'Tweet liked successfully'))
 })
 
+// Get all liked videos
 const getLikedVideos = asyncHandler(async (req, res) => {
-  const userId = req.user?._id
+  const userId = req.user._id
 
-  if (!userId) {
-    throw new ApiError(401, 'User not authenticated')
-  }
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     throw new ApiError(400, 'Invalid user ID')
   }
@@ -126,11 +111,14 @@ const getLikedVideos = asyncHandler(async (req, res) => {
 
   const likedVideos = likes.map(like => like.video).filter(Boolean)
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(200, likedVideos, 'Liked videos fetched successfully'),
-    )
+  return res.status(200).json(
+    new ApiResponse(200, likedVideos, 'Liked videos fetched successfully')
+  )
 })
 
-export { toggleCommentLike, toggleTweetLike, toggleVideoLike, getLikedVideos }
+export {
+  toggleCommentLike,
+  toggleTweetLike,
+  toggleVideoLike,
+  getLikedVideos
+}
