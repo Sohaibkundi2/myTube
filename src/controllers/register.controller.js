@@ -10,10 +10,10 @@ import  jwt  from 'jsonwebtoken'
 import mongoose from 'mongoose'
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, fullName, email, password } = req.body
+  const { username, fullName, email, password } = req.body || {}
 
   //validatiom
-
+  
   if (
     [username, fullName, email, password].some(field => field?.trim() === '')
   ) {
@@ -78,7 +78,7 @@ const registerUser = asyncHandler(async (req, res) => {
       .status(201)
       .json(new ApiResponse(201, createdUser, 'user created successfully'))
   } catch (error) {
-    console.log('user creation failed')
+      console.error("User creation failed:", error);
     if (coverImage) {
       await deleteFromCloudinary(coverImage.public_id)
     }
