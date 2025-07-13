@@ -1,9 +1,11 @@
 import { useState } from "react"
 import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from "../context/authContext";
 
 export default function Login() {
   const navigate = useNavigate()
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -29,6 +31,7 @@ export default function Login() {
       localStorage.setItem("token", accessToken)
       localStorage.setItem("user", JSON.stringify(user))
 
+      login(user, accessToken);
       navigate("/") // Redirect after login
     } catch (err) {
       setError(err?.response?.data?.message || "Login failed")

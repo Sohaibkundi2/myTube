@@ -6,11 +6,13 @@ import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Navbar from './compunents/Navbar'
 
 function App() {
 
   return (
         <div className="min-h-screen bg-gray-900">
+        <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
