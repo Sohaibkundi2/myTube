@@ -35,6 +35,7 @@ import likeRoute from './routes/like.route.js'
 import dashboardRoute from './routes/dashboard.route.js'
 import subscriptionRoute from './routes/subscription.route.js'
 import playlistRoute from "./routes/playlist.route.js"
+import errorHandler from './middlewares/errorHandler.js'
 
 app.use('/api/v1/users', userRoute)
 app.use('/api/v1/tweets', tweetRoute)
@@ -45,4 +46,6 @@ app.use('/api/v1/dashboard', dashboardRoute)
 app.use('/api/v1/subscriptions', subscriptionRoute)
 app.use("/api/v1/playlists", playlistRoute)
 
+
+app.use(errorHandler);
 export {app}
