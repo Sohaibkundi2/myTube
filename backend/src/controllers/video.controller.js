@@ -11,59 +11,92 @@ const getAllVideos = asyncHandler(async (req, res) => {
     page = 1,
     limit = 10,
     query,
-    sortBy = 'createdAt',
-    sortType = 'desc',
+    sortBy = "createdAt",
+    sortType = "desc",
     userId,
   } = req.query;
 
-  const filter = {
-    isPublished: true,
-  };
+  // 1. Filter: Only published videos
+  const filter = { isPublished: true };
 
+  // 2. Optional: Search by title or description
   if (query) {
     filter.$or = [
-      { title: { $regex: query, $options: 'i' } },
-      { description: { $regex: query, $options: 'i' } },
+      { title: { $regex: query, $options: "i" } },
+      { description: { $regex: query, $options: "i" } },
     ];
   }
 
+  // 3. Optional: Filter by userId
   if (userId) {
     try {
       filter.owner = new mongoose.Types.ObjectId(userId);
     } catch (error) {
-      throw new ApiError(400, 'Invalid user ID');
+      throw new ApiError(400, "Invalid user ID");
     }
   }
 
+  // 4. Sorting setup
   const sort = {};
-  sort[sortBy] = sortType === 'asc' ? 1 : -1;
+  sort[sortBy] = sortType === "asc" ? 1 : -1;
 
+  // 5. Aggregation pipeline with lookup and project
   const aggregate = Video.aggregate([
     { $match: filter },
     { $sort: sort },
+    {
+      $lookup: {
+        from: "users", // collection name in MongoDB
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+      },
+    },
+    { $unwind: "$owner" },
+    {
+      $project: {
+        title: 1,
+        description: 1,
+        thumbnail: 1,
+        videoFile: 1,
+        duration: 1,
+        views: 1,
+        isPublished: 1,
+        createdAt: 1,
+        owner: {
+          _id: "$owner._id",
+          username: "$owner.username",
+          avatar: "$owner.avatar",
+        },
+      },
+    },
   ]);
 
+  // 6. Pagination options
   const options = {
     page: parseInt(page),
     limit: parseInt(limit),
-    populate: {
-      path: 'owner',
-      select: 'username fullName avatar',
-    },
   };
 
+  // 7. Execute paginated aggregation
   const result = await Video.aggregatePaginate(aggregate, options);
 
+  // 8. Respond with structured result
   return res.status(200).json(
-    new ApiResponse(200, {
-      videos: result.docs,
-      totalCount: result.totalDocs,
-      totalPages: result.totalPages,
-      page: result.page,
-      limit: result.limit,
-    }, "Videos fetched successfully")
+    new ApiResponse(
+      200,
+      {
+        videos: result.docs,
+        totalCount: result.totalDocs,
+        totalPages: result.totalPages,
+        page: result.page,
+        limit: result.limit,
+      },
+      "Videos fetched successfully"
+    )
   );
 });
+
 
 
 const publishAVideo = asyncHandler(async (req, res) => {

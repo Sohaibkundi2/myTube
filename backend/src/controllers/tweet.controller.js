@@ -5,6 +5,16 @@ import {ApiResponse} from "../utils/ApiResponce.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import ApiError from './../utils/ApiError.js';
 
+
+const getAllTweets = asyncHandler(async (req, res) => {
+  const tweets = await Tweet.find({})
+    .populate("owner", "username avatar")
+    .sort({ createdAt: -1 });
+
+  res.status(200).json(new ApiResponse(200, tweets, "All tweets fetched"));
+});
+
+
 const createTweet = asyncHandler(async (req, res) => {
     let { content } = req.body
 
@@ -117,6 +127,7 @@ const deleteTweet = asyncHandler(async (req, res) => {
 })
 
 export {
+    getAllTweets,
     createTweet,
     getUserTweets,
     updateTweet,
