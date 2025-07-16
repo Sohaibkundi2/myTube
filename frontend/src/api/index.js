@@ -53,10 +53,11 @@ export const getComments = (videoId) => API.get(`/comments/${videoId}`);
 //
 // ❤️ LIKE APIs
 //
-export const toggleVideoLike = (videoId) => API.post(`/likes/video/${videoId}`);
+export const toggleVideoLike = (videoId) => API.patch(`/likes/videos/${videoId}/toggle`);
 export const toggleCommentLike = (commentId) => API.post(`/likes/comment/${commentId}`);
 export const toggleTweetLike = (tweetId) => API.post(`/likes/tweet/${tweetId}`);
 export const getLikedVideos = () => API.get("/likes/videos");
+export const getVideoLikes = (videoId) => API.get(`/likes/videos/${videoId}/count`);
 
 //
 // 📊 DASHBOARD APIs
@@ -67,6 +68,6 @@ export const getChannelVideos = (channelId) => API.get(`/dashboard/videos/${chan
 //
 // 📬 SUBSCRIPTION APIs
 //
-export const toggleSubscription = (channelId) => API.post(`/subscriptions/${channelId}`);
+export const toggleSubscription = (channelId) => API.post(`/subscriptions/${channelId}/toggle`);
 export const getSubscribers = (channelId) => API.get(`/subscriptions/${channelId}/subscribers`);
 export const getSubscribedChannels = (userId) => API.get(`/subscriptions/${userId}/channels`);

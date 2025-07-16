@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { getAllVideos, getTweets } from "../api"
+import { Link } from "react-router-dom"
 
 export default function Home() {
   const [videos, setVideos] = useState([])
@@ -41,25 +42,26 @@ export default function Home() {
             {videos.length === 0 ? (
               <p className="text-gray-500">No videos available.</p>
             ) : (
-<ul className="space-y-3">
-  {videos.slice(0, 5).map((video) => (
-    <li
-      key={video._id}
-      className="flex flex-col sm:flex-row gap-3 items-start sm:items-center"
-    >
-      <img
-        src={video.thumbnail}
-        alt={video.title}
-        className="w-full sm:w-40 h-80 sm:h-24 object-cover rounded"
-      />
-      <div>
-        <p className="font-medium">{video.title}</p>
-        <p className="text-sm text-gray-500">{video.owner?.username}</p>
-      </div>
-    </li>
-  ))}
-</ul>
-
+              <ul className="space-y-4">
+                {videos.slice(0, 5).map((video) => (
+                  <li
+                    key={video._id}
+                    className="flex flex-col sm:flex-row gap-3"
+                  >
+                    <Link to={`/watch/${video._id}`} className="flex flex-col sm:flex-row gap-3 w-full">
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        className="w-full sm:w-48 h-48 sm:h-28 object-cover rounded"
+                      />
+                      <div className="flex flex-col justify-between">
+                        <p className="font-medium text-base line-clamp-2">{video.title}</p>
+                        <p className="text-sm text-gray-500 mt-1">{video.owner?.username}</p>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
 

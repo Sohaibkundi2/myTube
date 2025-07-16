@@ -116,9 +116,25 @@ const getLikedVideos = asyncHandler(async (req, res) => {
   )
 })
 
+// GET total like count for a video
+const getVideoLikeCount = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+
+  if (!videoId || !mongoose.Types.ObjectId.isValid(videoId)) {
+    throw new ApiError(400, "Invalid or missing video ID");
+  }
+
+  const count = await Like.countDocuments({ video: videoId });
+
+  return res.status(200).json(
+    new ApiResponse(200, { count }, "Like count fetched successfully")
+  );
+});
+
 export {
   toggleCommentLike,
   toggleTweetLike,
   toggleVideoLike,
-  getLikedVideos
+  getLikedVideos,
+  getVideoLikeCount,
 }

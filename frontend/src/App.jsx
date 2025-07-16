@@ -8,6 +8,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './compunents/Navbar'
 import Footer from './compunents/Footer';
+import VideoPlayerPage from './pages/videoPlayer'
+import VideoDetails from './pages/VideoDetails'
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/videos" element={<VideoDetails />} />
+        <Route path="/watch/:videoId" element={<VideoPlayerPage />} />
       </Routes>
       <Footer />
     </div>
