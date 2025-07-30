@@ -10,6 +10,7 @@ import Navbar from './compunents/Navbar'
 import Footer from './compunents/Footer';
 import VideoPlayerPage from './pages/videoPlayer'
 import VideoDetails from './pages/VideoDetails'
+import TweetPage from './pages/TweetPage';
 
 function App() {
 
@@ -22,6 +23,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/videos" element={<VideoDetails />} />
         <Route path="/watch/:videoId" element={<VideoPlayerPage />} />
+        <Route path="/tweet/:tweetId" element={<TweetPage />} />
+        <Route path="/tweets" element={<TweetPage />} />
       </Routes>
       <Footer />
     </div>
