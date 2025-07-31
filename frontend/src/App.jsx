@@ -13,6 +13,7 @@ import VideoDetails from './pages/VideoDetails'
 import TweetPage from './pages/TweetPage';
 import ProfilePage from './pages/ProfilePage';
 import UploadVideo from './pages/UploadVideo';
+import UpdateVideo from './pages/UpdateVideo'
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/tweets" element={<TweetPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/upload-video" element={<UploadVideo />} />
+        <Route path="/update-video/:videoId" element={<UpdateVideo />} />
       </Routes>
       <Footer />
     </div>

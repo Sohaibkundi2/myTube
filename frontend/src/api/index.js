@@ -40,8 +40,9 @@ export const deleteTweet = (tweetId) => API.delete(`/tweets/${tweetId}`);
 export const createVideo = (formData) => API.post("/videos/publish", formData); //Done
 export const getAllVideos = () => API.get("/videos"); //Done
 export const getVideoById = (videoId) => API.get(`/videos/${videoId}`); //Done
-export const togglePublish = (videoId) => API.patch(`/videos/publish/${videoId}`);
-
+export const deleteVideo = (videoId) => API.delete(`/videos/${videoId}`);
+export const updateVideo = (videoId) => API.put(`/videos/${videoId}`, formData);
+export const togglePublishStatus = (videoId) => API.patch(`/videos/${videoId}/toggle`);
 //
 //  COMMENT APIs
 //
