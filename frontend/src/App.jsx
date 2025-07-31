@@ -12,6 +12,7 @@ import VideoPlayerPage from './pages/videoPlayer'
 import VideoDetails from './pages/VideoDetails'
 import TweetPage from './pages/TweetPage';
 import ProfilePage from './pages/ProfilePage';
+import UploadVideo from './pages/UploadVideo';
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/tweet/:tweetId" element={<TweetPage />} />
         <Route path="/tweets" element={<TweetPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/upload-video" element={<UploadVideo />} />
       </Routes>
       <Footer />
     </div>

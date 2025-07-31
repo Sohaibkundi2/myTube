@@ -105,7 +105,7 @@ export default function Home() {
           <div className="p-6 bg-base-200 rounded-xl shadow flex flex-col justify-between">
             <h2 className="text-xl font-semibold mb-4">Upload a New Video</h2>
             <p className="text-gray-400 mb-4">Share your creativity with the world!</p>
-            <Link to="/upload" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition w-max">
+            <Link to="/upload-video" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition w-max">
               Go to Upload
             </Link>
           </div>

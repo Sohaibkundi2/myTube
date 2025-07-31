@@ -16,11 +16,10 @@ API.interceptors.request.use((config) => {
 //
 //  USER APIs
 //
-export const getUserProfile = () => API.get('/users/me');
-export const registerUser = (formData) => API.post("/users/register", formData);
-export const loginUser = (data) => API.post("/users/login", data);
-export const getCurrentUser = () => API.get("/users/current-user");
-export const logoutUser = () => API.get("/users/logout");
+export const getUserProfile = () => API.get('/users/me');  //Done
+export const registerUser = (formData) => API.post("/users/register", formData); //Done
+export const loginUser = (data) => API.post("/users/login", data); //Done
+export const logoutUser = () => API.get("/users/logout"); //Done
 export const updateUserInfo = (data) => API.patch("/users/update-account", data);
 export const changePassword = (data) => API.patch("/users/change-password", data);
 export const updateAvatar = (formData) => API.patch("/users/avatar", formData);
@@ -31,16 +30,16 @@ export const getWatchHistory = () => API.get("/users/history");
 //  TWEET APIs
 //
 export const createTweet = (data) => API.post("/tweets", data);
-export const getTweets = () => API.get("/tweets");
+export const getTweets = () => API.get("/tweets"); //Done
 export const updateTweet = (tweetId, data) => API.patch(`/tweets/${tweetId}`, data);
 export const deleteTweet = (tweetId) => API.delete(`/tweets/${tweetId}`);
 
 //
 //  VIDEO APIs
 //
-export const createVideo = (formData) => API.post("/videos", formData);
-export const getAllVideos = () => API.get("/videos");
-export const getVideoById = (videoId) => API.get(`/videos/${videoId}`);
+export const createVideo = (formData) => API.post("/videos/publish", formData); //Done
+export const getAllVideos = () => API.get("/videos"); //Done
+export const getVideoById = (videoId) => API.get(`/videos/${videoId}`); //Done
 export const togglePublish = (videoId) => API.patch(`/videos/publish/${videoId}`);
 
 //
