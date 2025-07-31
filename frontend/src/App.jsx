@@ -11,6 +11,7 @@ import Footer from './compunents/Footer';
 import VideoPlayerPage from './pages/videoPlayer'
 import VideoDetails from './pages/VideoDetails'
 import TweetPage from './pages/TweetPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/watch/:videoId" element={<VideoPlayerPage />} />
         <Route path="/tweet/:tweetId" element={<TweetPage />} />
         <Route path="/tweets" element={<TweetPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
       <Footer />
     </div>

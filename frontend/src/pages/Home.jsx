@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
 import { getAllVideos, getTweets } from "../api"
 import { Link } from "react-router-dom"
+import { useAuth } from '../context/authContext'
+import dayjs from "dayjs"
 
 export default function Home() {
   const [videos, setVideos] = useState([])
   const [tweets, setTweets] = useState([])
   const [loading, setLoading] = useState(true)
+
+  const { user } = useAuth()
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -29,113 +33,122 @@ export default function Home() {
   }, [])
 
   return (
-   <div className="container mx-auto px-4 py-6">
-  <h1 className="text-3xl font-bold mb-4">Welcome to myTubeX</h1>
+    <div className="container mx-auto px-4 py-6">
+      <h1 className="text-3xl font-bold mb-4">Welcome to myTubeX</h1>
 
-  {loading ? (
-    <p className="text-gray-400">Loading content...</p>
-  ) : (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      {/* Videos Section */}
-<div className="p-6 bg-base-200 rounded-xl shadow">
-  <h2 className="text-xl font-semibold mb-4">Latest Videos</h2>
-  {videos.length === 0 ? (
-    <p className="text-gray-400">No videos available.</p>
-  ) : (
-    <>
-      <ul className="space-y-4">
-        {videos.slice(0, 5).map((video) => (
-          <li key={video._id} className="flex flex-col sm:flex-row bg-gray-900 gap-3">
-            <Link to={`/watch/${video._id}`} className="flex flex-col sm:flex-row gap-3 w-full hover:bg-gray-800 transition-all">
-              <img
-                src={video.thumbnail}
-                alt={video.title}
-                className="w-full sm:w-48 h-48 sm:h-28 object-cover rounded"
-              />
-              <div className="flex flex-col justify-between">
-                <p className="font-medium text-base line-clamp-2">{video.title}</p>
-                <p className="text-sm text-gray-400 mt-1">{video.owner?.username}</p>
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {videos.length > 5 && (
-        <Link to="/videos" className="mt-4 inline-block text-blue-500 hover:underline">
-          View more videos →
-        </Link>
-      )}
-    </>
-  )}
-</div>
-
-
-      {/* Tweets Section */}
-<div className="p-6 bg-base-200 rounded-xl shadow">
-  <h2 className="text-xl font-semibold mb-4">Recent Tweets</h2>
-  {tweets.length === 0 ? (
-    <p className="text-gray-400">No tweets available.</p>
-  ) : (
-    <>
-      <ul className="space-y-3">
-        {tweets.slice(0, 5).map(tweet => (
-          <li key={tweet._id}>
-            <Link to={`/tweet/${tweet._id}`} className="block p-3 rounded border border-gray-600 bg-gray-900 hover:bg-gray-800 transition-all">
-              <p className="font-medium">{tweet.owner?.username}</p>
-              <p className="text-sm text-gray-400">{tweet.content}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {tweets.length > 5 && (
-        <Link to="/tweets" className="mt-4 inline-block text-blue-500 hover:underline">
-          View more tweets →
-        </Link>
-      )}
-    </>
-  )}
-</div>
-
-
-      {/* Upload Section */}
-      <div className="p-6 bg-base-200 rounded-xl shadow flex flex-col justify-between">
-        <h2 className="text-xl font-semibold mb-4">Upload a New Video</h2>
-        <p className="text-gray-400 mb-4">Share your creativity with the world!</p>
-        <Link to="/upload" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition w-max">
-          Go to Upload
-        </Link>
-      </div>
-
-      <div className="p-6 bg-base-200 rounded-xl shadow flex flex-col justify-between">
-  <h2 className="text-xl font-semibold mb-4">Post a Tweet</h2>
-  <p className="text-gray-400 mb-4">Got something to say? Share your thoughts.</p>
-  <Link to="/tweet/upload" className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition w-max">
-    Upload Tweet
-  </Link>
-</div>
-
-
-      {/* Profile Section */}
-      <div className="p-6 bg-base-200 rounded-xl shadow">
-        <h2 className="text-xl font-semibold mb-4">Your Profile</h2>
-        <div className="flex items-center gap-4">
-          <img
-            src="https://i.pravatar.cc/150?u=your-profile" // dummy avatar
-            alt="Profile"
-            className="w-16 h-16 rounded-full object-cover"
-          />
-          <div>
-            <p className="font-semibold">Sohaib Kundi</p>
-            <p className="text-gray-400 text-sm">Fullstack Developer</p>
+      {loading ? (
+        <p className="text-gray-400">Loading content...</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
+          {/* Videos Section */}
+          <div className="p-6 bg-base-200 rounded-xl shadow">
+            <h2 className="text-xl font-semibold mb-4">Latest Videos</h2>
+            {videos.length === 0 ? (
+              <p className="text-gray-400">No videos available.</p>
+            ) : (
+              <>
+                <ul className="space-y-4">
+                  {videos.slice(0, 5).map((video) => (
+                    <li key={video._id} className="flex flex-col sm:flex-row bg-gray-900 gap-3">
+                      <Link to={`/watch/${video._id}`} className="flex flex-col sm:flex-row gap-3 w-full hover:bg-gray-800 transition-all">
+                        <img
+                          src={video.thumbnail}
+                          alt={video.title}
+                          className="w-full sm:w-48 h-48 sm:h-28 object-cover rounded"
+                        />
+                        <div className="flex flex-col justify-between">
+                          <p className="font-medium text-base line-clamp-2">{video.title}</p>
+                          <p className="text-sm text-gray-400 mt-1">{video.owner?.username}</p>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                {videos.length > 5 && (
+                  <Link to="/videos" className="mt-4 inline-block text-blue-500 hover:underline">
+                    View more videos →
+                  </Link>
+                )}
+              </>
+            )}
           </div>
+
+
+          {/* Tweets Section */}
+          <div className="p-6 bg-base-200 rounded-xl shadow">
+            <h2 className="text-xl font-semibold mb-4">Recent Tweets</h2>
+            {tweets.length === 0 ? (
+              <p className="text-gray-400">No tweets available.</p>
+            ) : (
+              <>
+                <ul className="space-y-3">
+                  {tweets.slice(0, 5).map(tweet => (
+                    <li key={tweet._id}>
+                      <Link to={`/tweet/${tweet._id}`} className="block p-3 rounded border border-gray-600 bg-gray-900 hover:bg-gray-800 transition-all">
+                        <p className="font-medium">{tweet.owner?.username}</p>
+                        <p className="text-sm text-gray-400">{tweet.content}</p>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                {tweets.length > 5 && (
+                  <Link to="/tweets" className="mt-4 inline-block text-blue-500 hover:underline">
+                    View more tweets →
+                  </Link>
+                )}
+              </>
+            )}
+          </div>
+
+
+          {/* Upload Section */}
+          <div className="p-6 bg-base-200 rounded-xl shadow flex flex-col justify-between">
+            <h2 className="text-xl font-semibold mb-4">Upload a New Video</h2>
+            <p className="text-gray-400 mb-4">Share your creativity with the world!</p>
+            <Link to="/upload" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition w-max">
+              Go to Upload
+            </Link>
+          </div>
+
+          <div className="p-6 bg-base-200 rounded-xl shadow flex flex-col justify-between">
+            <h2 className="text-xl font-semibold mb-4">Post a Tweet</h2>
+            <p className="text-gray-400 mb-4">Got something to say? Share your thoughts.</p>
+            <Link to="/tweet/upload" className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition w-max">
+              Upload Tweet
+            </Link>
+          </div>
+
+
+          {/* Profile Section */}
+          <div className="p-6 bg-base-200 rounded-xl shadow">
+            <h2 className="text-xl font-semibold mb-4">Your Profile</h2>
+            <div className="flex items-center gap-4">
+              <img
+                src={user.avatar}
+                alt="Profile"
+                className="w-16 h-16 rounded-full object-cover"
+              />
+              <div>
+                <p className="font-semibold text-lg">{user.fullName || user.username}</p>
+                <p className="text-sm text-gray-400">{user.role || "Fullstack Developer"}</p>
+                <p className="text-sm text-gray-500">{user.email}</p>
+              </div>
+            </div>
+            <div className="mt-4 space-y-1 text-sm text-gray-300">
+              <p>Joined: {dayjs(user.createdAt).format("MMMM YYYY")}</p>
+            </div>
+
+            <Link
+              to="/profile"
+              className="inline-block mt-4 text-blue-500 hover:underline"
+            >
+              View Profile
+            </Link>
+          </div>
+
         </div>
-        <Link to="/profile" className="inline-block mt-4 text-blue-500 hover:underline">
-          View Profile
-        </Link>
-      </div>
+      )}
     </div>
-  )}
-</div>
 
   )
 }

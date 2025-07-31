@@ -16,6 +16,7 @@ API.interceptors.request.use((config) => {
 //
 //  USER APIs
 //
+export const getUserProfile = () => API.get('/users/me');
 export const registerUser = (formData) => API.post("/users/register", formData);
 export const loginUser = (data) => API.post("/users/login", data);
 export const getCurrentUser = () => API.get("/users/current-user");

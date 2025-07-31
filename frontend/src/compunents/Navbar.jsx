@@ -13,7 +13,7 @@ export default function Navbar() {
 
 const handleLogout = () => {
   logout()
-  navigate("/login") // or homepage
+  navigate("/login") 
 }
 
   return (

@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     setToken(token);
     localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", token); // 🛠 fixed name: "accessToken" → "token"
+    localStorage.setItem("token", token);
   };
 
   // logout handler
