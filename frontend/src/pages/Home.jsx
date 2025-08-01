@@ -113,7 +113,7 @@ export default function Home() {
           <div className="p-6 bg-base-200 rounded-xl shadow flex flex-col justify-between">
             <h2 className="text-xl font-semibold mb-4">Post a Tweet</h2>
             <p className="text-gray-400 mb-4">Got something to say? Share your thoughts.</p>
-            <Link to="/tweet/upload" className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition w-max">
+            <Link to="/upload-tweet" className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition w-max">
               Upload Tweet
             </Link>
           </div>

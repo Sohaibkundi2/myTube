@@ -29,7 +29,7 @@ export const getWatchHistory = () => API.get("/users/history");
 //
 //  TWEET APIs
 //
-export const createTweet = (data) => API.post("/tweets", data);
+export const createTweet = (data) => API.post("/tweets", data); //Done
 export const getTweets = () => API.get("/tweets"); //Done
 export const updateTweet = (tweetId, data) => API.patch(`/tweets/${tweetId}`, data);
 export const deleteTweet = (tweetId) => API.delete(`/tweets/${tweetId}`);
@@ -40,7 +40,7 @@ export const deleteTweet = (tweetId) => API.delete(`/tweets/${tweetId}`);
 export const createVideo = (formData) => API.post("/videos/publish", formData); //Done
 export const getAllVideos = () => API.get("/videos"); //Done
 export const getVideoById = (videoId) => API.get(`/videos/${videoId}`); //Done
-export const deleteVideo = (videoId) => API.delete(`/videos/${videoId}`);
+export const deleteVideo = (videoId) => API.delete(`/videos/${videoId}`); // Done
 export const updateVideo = (videoId,formData) => API.put(`/videos/${videoId}`, formData); //Done
 export const togglePublishStatus = (videoId) => API.patch(`/videos/${videoId}/toggle`);
 //
