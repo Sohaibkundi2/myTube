@@ -33,10 +33,10 @@ const UpdateVideo = () => {
 
       const response = await updateVideo(videoId, formData);
       setMessage('Video updated successfully');
-      navigate('/videos');
+      setTimeout(() => navigate('/videos'), 1500);
       
     } catch (error) {
-      setMessage('Error updating video');
+      setMessage('Error updating video', error);
     } finally {
       setLoading(false);
     }

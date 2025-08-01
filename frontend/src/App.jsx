@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Router, Routes } from 'react-router-dom'
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -14,6 +14,7 @@ import TweetPage from './pages/TweetPage';
 import ProfilePage from './pages/ProfilePage';
 import UploadVideo from './pages/UploadVideo';
 import UpdateVideo from './pages/UpdateVideo'
+import DeleteVideo from './pages/DeleteVideo'
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/upload-video" element={<UploadVideo />} />
         <Route path="/update-video/:videoId" element={<UpdateVideo />} />
+        <Route path="/delete-video/:videoId" element={<DeleteVideo />}/>
       </Routes>
       <Footer />
     </div>
