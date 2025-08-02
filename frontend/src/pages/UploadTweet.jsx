@@ -20,15 +20,19 @@ const UploadTweet = () => {
         setLoading(true);
         try {
 
-            await createTweet({content});
+            await createTweet({ content });
             setMessage("Upload successful!");
 
             setTimeout(() => {
                 navigate("/");
-            }, 1500); 
+            }, 1500);
         } catch (error) {
-            console.error("Error uploading tweet:", error);
-            setMessage("Upload failed.");
+            if (error.response?.data?.message === "jwt expired") {
+                setMessage("Session expired. Please log in again.");
+                setTimeout(() => {
+                    navigate("/login");
+                }, 2000);
+            }
         } finally {
             setLoading(false)
         }

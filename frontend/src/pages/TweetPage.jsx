@@ -1,12 +1,16 @@
 import { getTweets } from "../api";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authContext";
+import TweetCard from "../compunents/TweetCard";
 
 export default function TweetPage() {
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+
+    const { user } = useAuth();
 
   useEffect(() => {
     const fetchTweets = async () => {
@@ -47,15 +51,16 @@ export default function TweetPage() {
             tweets.map((tweet) => (
               <li
                 key={tweet._id}
-                className="p-3 rounded border border-gray-600 bg-gray-900"
+                className=" rounded border border-gray-950 bg-gray-900"
               >
-                <Link
+                {/* <Link
                   to={`/tweet/${tweet._id}`}
                   className="block hover:bg-gray-800 transition-all"
                 >
                   <p className="font-medium">{tweet.owner?.username}</p>
                   <p className="text-sm text-gray-400">{tweet.content}</p>
-                </Link>
+                </Link> */}
+                <TweetCard key={tweet._id} tweet={tweet} />
               </li>
             ))
           )}

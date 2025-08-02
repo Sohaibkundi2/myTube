@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const UpdateVideo = () => {
-  const { videoId } = useParams(); 
+  const { videoId } = useParams();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -34,9 +34,14 @@ const UpdateVideo = () => {
       const response = await updateVideo(videoId, formData);
       setMessage('Video updated successfully');
       setTimeout(() => navigate('/videos'), 1500);
-      
+
     } catch (error) {
-      setMessage('Error updating video', error);
+      if (error.response?.data?.message === "jwt expired") {
+        setMessage("Session expired. Please log in again.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      }
     } finally {
       setLoading(false);
     }
@@ -65,6 +70,12 @@ const UpdateVideo = () => {
           onChange={(e) => setThumbnail(e.target.files[0])}
           className="w-full"
         />
+        {/* Message */}
+        {message && (
+          <p className={`text-center mb-4 ${message.includes("successfully") ? "text-green-500" : "text-red-500"}`}>
+            {message}
+          </p>
+        )}
         <button
           type="submit"
           disabled={loading}
@@ -73,7 +84,6 @@ const UpdateVideo = () => {
           {loading ? 'Updating...' : 'Update Video'}
         </button>
       </form>
-      {message && <p className="mt-4 text-center">{message}</p>}
     </div>
   );
 };
