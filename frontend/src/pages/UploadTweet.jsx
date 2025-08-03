@@ -17,6 +17,12 @@ const UploadTweet = () => {
             return;
         }
 
+        if (content.length > 280) {
+            setMessage('Tweet is more then 280 words!');
+            setLoading(false);
+            return;
+        }
+
         setLoading(true);
         try {
 
@@ -55,7 +61,7 @@ const UploadTweet = () => {
                         id="tweet"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        className="w-full px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full h-50 px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Share your thoughts with the world..."
                         required
                     />
@@ -63,11 +69,10 @@ const UploadTweet = () => {
 
                 {/* Message */}
                 {message && (
-                    <p className={`text-center mb-4 ${message.includes("successful") ? "text-green-500" : "text-red-500"}`}>
+                    <p className={`text-center mb-4 ${message.includes("successful") ? "text-green-500 bg-gray-700 p-1" : "bg-gray-700 p-1 text-red-500"}`}>
                         {message}
                     </p>
                 )}
-
                 {/* Submit Button */}
                 <button
                     type="submit"

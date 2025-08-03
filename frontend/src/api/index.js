@@ -31,7 +31,7 @@ export const getWatchHistory = () => API.get("/users/history");
 //
 export const createTweet = (data) => API.post("/tweets", data); //Done
 export const getTweets = () => API.get("/tweets"); //Done
-export const updateTweet = (tweetId, data) => API.patch(`/tweets/${tweetId}`, data);
+export const updateTweet = (tweetId, data) => API.put(`/tweets/${tweetId}`, data); //Done
 export const deleteTweet = (tweetId) => API.delete(`/tweets/${tweetId}`);
 
 //

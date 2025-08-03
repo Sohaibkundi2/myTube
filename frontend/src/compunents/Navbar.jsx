@@ -70,7 +70,7 @@ const handleLogout = () => {
       {/* Mobile dropdown menu */}
       {isOpen && (
         <div className="absolute top-16 left-0 w-full bg-base-100 p-4 z-50 md:hidden border-t">
-          <ul className="menu menu-vertical space-y-2">
+          <ul className="menu menu-vertical w-full  space-y-2">
             <li><Link to="/">Home</Link></li>
             <li><Link to="/videos">Videos</Link></li>
             <li><Link to="/playlists">Playlists</Link></li>

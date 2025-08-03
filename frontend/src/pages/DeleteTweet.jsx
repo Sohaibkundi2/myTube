@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { deleteVideo } from '../api';
+import { deleteTweet } from '../api';
 import ConfirmDialog from './../compunents/ConfirmDialog';
 
-const DeleteVideo = () => {
+const DeleteTweet = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [showConfirm, setShowConfirm] = useState(true)
 
-  const { videoId } = useParams();
+  const { tweetId } = useParams();
   const navigate = useNavigate();
 
   const handleDelete = async () => {
     try {
       setLoading(true);
       setMessage(null);
-      await deleteVideo(videoId);
-      setMessage("Video deleted successfully");
-      setTimeout(() => navigate('/videos'), 1500);
+      await deleteTweet(tweetId);
+      setMessage("Tweet deleted successfully");
+      setTimeout(() => navigate('/tweets'), 1500);
     } catch (error) {
-      setMessage("Video not deleted");
+      setMessage("tweet not deleted");
       if (error.response?.data?.message === "jwt expired") {
         setMessage("Session expired. Please log in again.");
         setTimeout(() => {
@@ -33,7 +33,7 @@ const DeleteVideo = () => {
 
   const handleCancel = () => {
     setShowConfirm(false);
-    navigate('/videos');
+    navigate('/tweets');
   };
 
   return (
@@ -43,7 +43,7 @@ const DeleteVideo = () => {
       <ConfirmDialog
         isOpen={showConfirm}
         title="Confirm Delete"
-        message="Are you sure you want to delete this video?"
+        message="Are you sure you want to delete this tweet?"
         onConfirm={() => {
           setShowConfirm(false);
           handleDelete();
@@ -54,4 +54,4 @@ const DeleteVideo = () => {
   );
 };
 
-export default DeleteVideo;
+export default DeleteTweet;
