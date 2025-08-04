@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { getUserProfile, getChannelStats, getChannelVideos, deleteVideo } from '../api'
+import { getUserProfile, getChannelStats, getChannelVideos, getWatchHistory } from '../api'
 import dayjs from "dayjs"
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
 
 const ProfilePage = () => {
     const [profile, setProfile] = useState(null)
     const [stats, setStats] = useState(null)
     const [videos, setVideos] = useState([])
+    const [history, setHistory] = useState([])
     const [loading, setLoading] = useState(true)
 
     const { logout } = useAuth()
@@ -18,22 +19,9 @@ const ProfilePage = () => {
         navigate("/login")
     }
 
-    const handleDelete = async (videoId) => {
-        const confirm = window.confirm("Are you sure you want to delete this video?");
-        if (!confirm) return;
-
-        try {
-            await deleteVideo(videoId);
-            setVideos(prev => prev.filter(v => v._id !== videoId));
-        } catch (error) {
-            console.error("Error deleting video:", error);
-            alert("Failed to delete video.");
-        }
-    }
-
-    const handleEdit = (videoId) => {
-        navigate(`/edit-video/${videoId}`);
-    }
+    const handleCardClick = (_id) => {
+    navigate(`/watch/${_id}`);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,6 +45,21 @@ const ProfilePage = () => {
 
         fetchData();
     }, [])
+
+    useEffect(() => {
+        const fetchHistory = async () => {
+            try {
+                const res = await getWatchHistory();
+                setHistory(res.data.data);
+            } catch (error) {
+                console.error("Error fetching watch history", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHistory();
+    }, []);
 
     if (loading) return <p className="text-center py-10 text-gray-400">Loading profile...</p>
     if (!profile) return <p className="text-center py-10 text-red-500">Profile not found.</p>
@@ -134,7 +137,7 @@ const ProfilePage = () => {
                     <h2 className="text-xl font-semibold mb-4">Your Uploaded Videos</h2>
                     <div className="grid sm:grid-cols-2 gap-6">
                         {videos.map(video => (
-                            <div key={video._id} className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow relative">
+                            <div key={video._id} onClick={()=>handleCardClick(video._id)} className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow relative cursor-pointer">
                                 <img
                                     src={video.thumbnail || "/placeholder.jpg"}
                                     alt={video.title}
@@ -149,25 +152,37 @@ const ProfilePage = () => {
                                 </p>
 
                                 {/* Action buttons */}
-                                <div className="flex mt-3 gap-2">
-                                    <button
-                                        onClick={() => handleEdit(video._id)}
-                                        className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+                                <div className="flex justify-end gap-2 mt-2 px-3 z-10" onClick={(e) => e.stopPropagation()}>
+                                    <Link
+                                        to={`/update-video/${video._id}`}
+                                        className="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                                     >
                                         Edit
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(video._id)}
-                                        className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                                    </Link>
+                                    <Link
+                                        to={`/delete-video/${video._id}`}
+                                        className="text-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                                     >
                                         Delete
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
             )}
+            <div className="px-4 py-6">
+                <h2 className="text-2xl font-bold mb-4">Watch History</h2>
+                {history.length === 0 ? (
+                    <p>No watch history yet.</p>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {history.map((video) => (
+                            <VideoCard key={video._id} video={video} />
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

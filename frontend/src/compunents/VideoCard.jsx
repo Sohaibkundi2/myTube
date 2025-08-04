@@ -1,6 +1,4 @@
-import React, { use } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../context/authContext";
+
 import { useNavigate } from "react-router-dom";
 
 
@@ -17,8 +15,6 @@ const VideoCard = ({ video, currentUserId }) => {
   } = video;
 
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const isUploader = owner?._id === user?._id;
    const handleCardClick = () => {
     navigate(`/watch/${_id}`);
   };
@@ -54,24 +50,6 @@ const VideoCard = ({ video, currentUserId }) => {
           {views} views • {new Date(createdAt).toLocaleDateString()}
         </div>
       </div>
-
-      {/* Buttons */}
-      {isUploader && (
-        <div className="flex justify-end gap-2 mt-2 px-3 z-10" onClick={(e) => e.stopPropagation()}>
-          <Link
-            to={`/update-video/${_id}`}
-            className="text-sm px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Edit
-          </Link>
-          <Link
-            to={`/delete-video/${_id}`}
-            className="text-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            Delete
-          </Link>
-        </div>
-      )}
     </div>
   );
 };

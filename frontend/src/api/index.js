@@ -63,8 +63,8 @@ export const getVideoLikes = (videoId) => API.get(`/likes/videos/${videoId}/coun
 //
 //  DASHBOARD APIs
 //
-export const getChannelStats = (channelId) => API.get(`/dashboard/stats/${channelId}`);
-export const getChannelVideos = (channelId) => API.get(`/dashboard/videos/${channelId}`);
+export const getChannelStats = (channelId) => API.get(`/dashboard/stats/${channelId}`);  //Done
+export const getChannelVideos = (channelId) => API.get(`/dashboard/videos/${channelId}`); //Done
 
 //
 //  SUBSCRIPTION APIs
