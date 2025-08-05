@@ -51,7 +51,7 @@ const UploadVideo = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
       <form
         onSubmit={handleVideoUpload}
-        className="bg-gray-800 p-8 rounded-xl shadow-md w-full max-w-md"
+        className="p-8 rounded-xl shadow-md w-full max-w-md bg-gradient-to-br from-gray-700 via-gray-500 to-gray-600"
       >
         <h2 className="text-white text-2xl font-bold mb-6 text-center">Upload Video</h2>
 
@@ -88,37 +88,49 @@ const UploadVideo = () => {
 
         {/* Video File Upload */}
         <div className="mb-4">
-          <label className="block text-white mb-2" htmlFor="video">
-            Video File
+          <label className="block text-white mb-2">Video File</label>
+          <label
+            htmlFor="video"
+            className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700 transition-colors"
+          >
+            {video ? video.name : "Choose Video File"}
           </label>
           <input
             id="video"
             type="file"
             accept="video/*"
             onChange={(e) => setVideo(e.target.files[0])}
-            className="w-full text-white"
+            className="hidden"
             required
           />
         </div>
 
         {/* Thumbnail Upload */}
         <div className="mb-6">
-          <label className="block text-white mb-2" htmlFor="thumbnail">
-            Thumbnail Image
+          <label className="block text-white mb-2">Thumbnail Image</label>
+          <label
+            htmlFor="thumbnail"
+            className="flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded cursor-pointer hover:bg-green-700 transition-colors"
+          >
+            {thumbnail ? thumbnail.name : "Choose Thumbnail Image"}
           </label>
           <input
             id="thumbnail"
             type="file"
             accept="image/*"
             onChange={(e) => setThumbnail(e.target.files[0])}
-            className="w-full text-white"
+            className="hidden"
             required
           />
         </div>
 
         {/* Message */}
         {message && (
-          <p className={`text-center mb-4 ${message.includes("successful") ? "text-green-500" : "text-red-500"}`}>
+          <p
+            className={`text-center mb-4 ${
+              message.includes("successful") ? "text-green-500" : "text-red-500"
+            }`}
+          >
             {message}
           </p>
         )}
