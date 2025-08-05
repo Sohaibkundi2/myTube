@@ -130,12 +130,16 @@ export default function Home() {
               />
               <div>
                 <p className="font-semibold text-lg">{user.fullName || user.username}</p>
-                <p className="text-sm text-gray-400">{user.role || "Fullstack Developer"}</p>
                 <p className="text-sm text-gray-500">{user.email}</p>
               </div>
             </div>
             <div className="mt-4 space-y-1 text-sm text-gray-300">
-              <p>Joined: {dayjs(user.createdAt).format("MMMM YYYY")}</p>
+<p className="text-sm text-muted-foreground">
+  Member Since:
+  <span className="ml-1 font-medium text-black dark:text-white">
+    {dayjs(user.createdAt).format("DD MMMM YYYY")}
+  </span>
+</p>
             </div>
 
             <Link

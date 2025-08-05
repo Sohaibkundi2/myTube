@@ -33,7 +33,7 @@ const DeleteVideo = () => {
 
   const handleCancel = () => {
     setShowConfirm(false);
-    navigate('/videos');
+    navigate('/profile');
   };
 
   return (

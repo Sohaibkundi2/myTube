@@ -25,11 +25,11 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem("user");
-    localStorage.removeItem("token"); // ⚠ don't use localStorage.clear() — it may clear other keys like theme or daisy settings
+    localStorage.removeItem("token"); 
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   );
