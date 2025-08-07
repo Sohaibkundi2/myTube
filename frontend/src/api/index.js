@@ -42,7 +42,7 @@ export const getAllVideos = () => API.get("/videos"); //Done
 export const getVideoById = (videoId) => API.get(`/videos/${videoId}`); //Done
 export const deleteVideo = (videoId) => API.delete(`/videos/${videoId}`); // Done
 export const updateVideo = (videoId,formData) => API.put(`/videos/${videoId}`, formData); //Done
-export const togglePublishStatus = (videoId) => API.patch(`/videos/${videoId}/toggle`);
+export const togglePublishStatus = (videoId) => API.patch(`/videos/${videoId}/toggle`);//Done
 //
 //  COMMENT APIs
 //

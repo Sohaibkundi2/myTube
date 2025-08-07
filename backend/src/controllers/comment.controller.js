@@ -50,6 +50,8 @@ const addComment = asyncHandler(async (req, res) => {
         owner: req.user?._id,
     })
 
+    await newComment.populate("owner", "username avatar");
+
     return res
         .status(201)
         .json(new ApiResponse(201, newComment, "Comment added successfully"));

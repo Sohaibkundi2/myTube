@@ -94,7 +94,7 @@ export default function Home() {
                         <p className=" text-sm text-gray-400">{tweet.content}</p>
                       </Link>
                     </li>
-                    
+
                   ))}
                 </ul>
                 {tweets.length > 5 && (
@@ -126,36 +126,50 @@ export default function Home() {
 
 
           {/* Profile Section */}
-          <div className="p-6 bg-base-200 rounded-xl shadow">
-            <h2 className="text-xl font-semibold mb-4">Your Profile</h2>
-            <div className="flex items-center gap-4">
-              <img
-                src={user.avatar}
-                alt="Profile"
-                className="w-16 h-16 rounded-full object-cover"
-              />
-              <div>
-                <p className="font-semibold text-lg">{user.fullName || user.username}</p>
-                <p className="text-sm text-gray-500">{user.email}</p>
+          {user ? (
+            // Profile Section (shown only if user is logged in)
+            <div className="p-6 bg-base-200 rounded-xl shadow">
+              <h2 className="text-xl font-semibold mb-4">Your Profile</h2>
+              <div className="flex items-center gap-4">
+                <img
+                  src={user?.avatar}
+                  alt="Profile"
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-semibold text-lg">
+                    {user.fullName || user.username}
+                  </p>
+                  <p className="text-sm text-gray-500">{user.email}</p>
+                </div>
               </div>
-            </div>
-            <div className="mt-4 space-y-1 text-sm text-gray-300">
-              <p className="text-sm text-muted-foreground">
-                Member Since:
-                <span className="ml-1 font-medium text-black dark:text-white">
-                  {dayjs(user.createdAt).format("DD MMMM YYYY")}
-                </span>
-              </p>
-            </div>
+              <div className="mt-4 space-y-1 text-sm text-gray-300">
+                <p className="text-sm text-muted-foreground">
+                  Member Since:
+                  <span className="ml-1 font-medium text-black dark:text-white">
+                    {dayjs(user.createdAt).format("DD MMMM YYYY")}
+                  </span>
+                </p>
+              </div>
 
-            <Link
-              to="/profile"
-              className="inline-block mt-4 text-blue-500 hover:underline"
-            >
-              View Profile
-            </Link>
-          </div>
-
+              <Link
+                to="/profile"
+                className="inline-block mt-4 text-blue-500 hover:underline"
+              >
+                View Profile
+              </Link>
+            </div>
+          ) : (
+            <div className="p-6 bg-base-200 rounded-xl shadow text-center">
+              <p className="text-gray-500">Please log in to view your profile.</p>
+              <Link
+                to="/login"
+                className="inline-block mt-4  text-blue-500 hover:underline"
+              >
+                Go to Login
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </div>

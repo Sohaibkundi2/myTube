@@ -63,8 +63,14 @@ const UpdateProfile = ({ user }) => {
       setUser(prev => ({ ...prev, fullName, email }))
       localStorage.setItem('user', JSON.stringify({ ...user, fullName, email }))
     } catch (err) {
+            if (err.response && err.response.status === 401) {
+      // Auto redirect 
+      showMessage("Session expired. Please login again.");
+      navigate("/login");
+    }
       console.error(err)
       showMessage('', 'Failed to update profile.')
+       return Promise.reject(err);
     } finally {
       setIsUpdatingInfo(false)
     }

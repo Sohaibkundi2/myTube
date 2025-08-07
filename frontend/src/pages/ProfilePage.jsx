@@ -54,12 +54,16 @@ const ProfilePage = () => {
         setStats(statsRes.data.data);
         setVideos(videosRes.data.data);
       } catch (error) {
-
+        if (error.response && error.response.status === 401) {
+          setErrorMsg("Session expired. Please login again.");
+          navigate("/login");
+        }
         if (error.response?.data?.message === "jwt expired") {
           setErrorMsg("Session expired. Please log in again.");
           setTimeout(() => navigate("/login"), 2000);
         }
         console.error("Error fetching data:", error);
+        return Promise.reject(error);
       } finally {
         setLoading(false);
       }
@@ -246,8 +250,8 @@ const ProfilePage = () => {
                   <button
                     onClick={() => handleTogglePublish(video._id)}
                     className={`text-sm px-3 py-1 rounded ${video.isPublished
-                        ? "bg-yellow-500 hover:bg-yellow-600"
-                        : "bg-green-600 hover:bg-green-700"
+                      ? "bg-yellow-500 hover:bg-yellow-600"
+                      : "bg-green-600 hover:bg-green-700"
                       } text-white`}
                   >
                     {video.isPublished ? "Unpublish" : "Publish"}

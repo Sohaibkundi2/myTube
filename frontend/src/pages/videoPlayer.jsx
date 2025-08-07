@@ -1,6 +1,12 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import VideoCard from "../compunents/VideoCard"
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 import {
   getVideoById,
   getAllVideos,
@@ -38,7 +44,7 @@ export default function VideoPlayerPage() {
         setOtherVideos(
           allRes.data?.data?.videos?.filter((v) => v._id !== videoId) || []
         );
-        setComments(commentRes.data?.docs || []);
+        setComments(commentRes?.data.data?.docs || []);
       } catch (err) {
         console.error("Failed to load video, comments, or suggestions:", err);
       } finally {
@@ -76,19 +82,19 @@ export default function VideoPlayerPage() {
     }
   };
 
-const handleSubscribe = async () => {
-  try {
-    await toggleSubscription(video.owner._id);
-    setIsSubscribed((prev) => !prev);
-    const res = await getSubscribers(video.owner._id);
-    setSubscribers(res.data?.data || []);
-  } catch (err) {
-    const msg =
-      err?.response?.data?.message || "Something went wrong while subscribing.";
-    alert(msg); 
-    console.error("Subscribe failed", err);
-  }
-};
+  const handleSubscribe = async () => {
+    try {
+      await toggleSubscription(video.owner._id);
+      setIsSubscribed((prev) => !prev);
+      const res = await getSubscribers(video.owner._id);
+      setSubscribers(res.data?.data || []);
+    } catch (err) {
+      const msg =
+        err?.response?.data?.message || "Something went wrong while subscribing.";
+      alert(msg);
+      console.error("Subscribe failed", err);
+    }
+  };
 
 
   // comment
@@ -98,6 +104,7 @@ const handleSubscribe = async () => {
     try {
       const res = await addComment(videoId, { content: newComment });
       setComments((prev) => [res.data.data, ...prev]);
+      console.log(res.data.data)
       setNewComment("");
     } catch (err) {
       console.error("Comment error", err);
@@ -177,18 +184,36 @@ const handleSubscribe = async () => {
         </form>
 
         {/* Comments List */}
-        <div className="space-y-3">
+
+        <div className="space-y-4">
           {comments.length === 0 ? (
             <p className="text-sm text-gray-500">No comments yet.</p>
           ) : (
             comments.map((c) => (
-              <div key={c._id} className="bg-base-200 p-3 rounded">
-                <p className="text-sm font-medium">{c.owner?.username}</p>
-                <p className="text-sm text-gray-600">{c.content}</p>
+              <div key={c._id} className="bg-base-200 p-4 rounded flex gap-4">
+                <img
+                  src={c.owner?.avatar}
+                  alt={c.owner?.username}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-sm">{c.owner?.fullName}</p>
+                      <p className="text-xs text-gray-500">@{c.owner?.username}</p>
+                    </div>
+                              <span className="text-xs text-gray-500">
+            {dayjs(c.createdAt).fromNow()}
+          </span>
+                  </div>
+                  <p className="text-sm text-gray-700">{c.content}</p>
+                </div>
               </div>
             ))
           )}
         </div>
+
+
       </div>
 
       {/* Sidebar with Suggestions */}
