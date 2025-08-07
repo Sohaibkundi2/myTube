@@ -8,13 +8,30 @@ import { useNavigate } from "react-router-dom";
 export default function Navbar() {
   const { user, logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
+  const [showConfirm, setShowConfirm] = useState()
 
   const navigate = useNavigate()
 
-const handleLogout = () => {
-  logout()
-  navigate("/login") 
-}
+  const handleLogout = () => {
+    logout()
+    navigate("/login")
+  }
+
+
+  //logout
+  const handleLogoutClick = () => {
+    setShowConfirm(true); // show modal/confirmation
+  };
+
+  const confirmLogout = () => {
+    logout();             // call from context
+    setShowConfirm(false);
+    navigate("/login")
+  };
+
+  const cancelLogout = () => {
+    setShowConfirm(false);
+  };
 
   return (
     <div className="navbar bg-base-100 shadow px-4 sticky top-0 z-50">
@@ -45,7 +62,33 @@ const handleLogout = () => {
             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-gray-700 rounded-box w-52 ">
               <li><Link to="/profile">Profile</Link></li>
               <li>
-              <button onClick={handleLogout} className="text-left">Logout</button>
+                <button
+                  onClick={handleLogoutClick}
+                  className="bg-red-500 text-white  rounded hover:bg-red-700 cursor-pointer"
+                >Logout
+                </button>
+
+                {showConfirm && (
+                  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-xl">
+                      <p className=" mb-4">Are you sure you want to logout?</p>
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={cancelLogout}
+                          className="bg-gray-300 dark:bg-gray-700 px-2 py-1 rounded"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={confirmLogout}
+                          className="bg-red-600 text-white px-2 py-1 rounded"
+                        >
+                          Yes, Logout
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </li>
             </ul>
           </div>
@@ -61,7 +104,7 @@ const handleLogout = () => {
       <div className="md:hidden flex-none">
         <button className="btn btn-ghost btn-circle" onClick={() => setIsOpen(!isOpen)}>
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round"  strokeWidth={2}
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
               d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
           </svg>
         </button>
@@ -78,8 +121,35 @@ const handleLogout = () => {
             {user ? (
               <>
                 <li><Link to="/profile">Profile</Link></li>
+                <li><Link to="/update-profile">Change Profile</Link></li>
                 <li>
-                  <button onClick={handleLogout} className="text-left">Logout</button>
+                  <button
+                    onClick={handleLogoutClick}
+                    className="bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer"
+                  >Logout
+                  </button>
+
+                  {showConfirm && (
+                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                      <div className="bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-xl">
+                        <p className="text-lg font-semibold mb-4">Are you sure you want to logout?</p>
+                        <div className="flex items-center justify-center gap-4">
+                          <button
+                            onClick={cancelLogout}
+                            className="bg-gray-300 dark:bg-gray-700 px-4 py-2 rounded"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={confirmLogout}
+                            className="bg-red-600 text-white px-4 py-2 rounded"
+                          >
+                            Yes, Logout
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </li>
               </>
             ) : (

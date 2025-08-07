@@ -51,8 +51,15 @@ const UploadVideo = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
       <form
         onSubmit={handleVideoUpload}
-        className="p-8 rounded-xl shadow-md w-full max-w-md bg-gradient-to-br from-gray-700 via-gray-500 to-gray-600"
+        className="p-8 rounded-xl shadow-md w-full max-w-md bg-gradient-to-br from-gray-700 via-gray-500 to-gray-600 relative"
       >
+        {/* Cross button */}
+        <div
+          className='absolute top-5 right-5 text-2xl text-red-600 hover:text-red-800 font-bold cursor-pointer bg-gray-700 rounded px-2'
+          onClick={() =>
+            navigate("/")
+          }
+        >X</div>
         <h2 className="text-white text-2xl font-bold mb-6 text-center">Upload Video</h2>
 
         {/* Title Input */}
@@ -127,9 +134,8 @@ const UploadVideo = () => {
         {/* Message */}
         {message && (
           <p
-            className={`text-center mb-4 ${
-              message.includes("successful") ? "text-green-500" : "text-red-500"
-            }`}
+            className={`text-center mb-4 ${message.includes("successful") ? "text-green-500" : "text-red-500"
+              }`}
           >
             {message}
           </p>

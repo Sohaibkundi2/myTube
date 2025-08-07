@@ -54,38 +54,42 @@ const UploadTweet = () => {
         <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
             <form
                 onSubmit={handleTweetUpload}
-                className="p-8 rounded-xl shadow-md w-full max-w-md bg-gradient-to-br from-gray-700 via-gray-500 to-gray-600"
+                className="p-8 rounded-xl shadow-md w-full max-w-md bg-gradient-to-br from-gray-700 via-gray-500 to-gray-700 relative"
             >
+
+                              {/* Cross button */}
+      <div
+      className='absolute top-5 right-5 text-2xl text-red-600 hover:text-red-800 font-bold cursor-pointer bg-gray-700 rounded px-2'
+      onClick={()=>
+        navigate("/")
+      }
+      >X</div>
                 <h2 className="text-white text-2xl font-bold mb-6 text-center">Upload Tweet</h2>
 
-                {/* Tweet Textarea */}
                 <div className="mb-4">
-                    <label className="block text-white mb-2" htmlFor="tweet">
+                    <label htmlFor="content" className="block text-white mb-2">
                         Tweet
                     </label>
-                    <p
-                        className={`text-sm mt-1 ${content.length > 270 ? "text-red-500 my-1" : "text-gray-400 my-1"
-                            }`}
-                    >
-                        {280 - content.length} characters left
-                    </p>
-
                     <textarea
-                        id="tweet"
+                        id="content"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         className="w-full h-40 px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Share your thoughts with the world..."
+                        placeholder="What do you want to change?"
+                        maxLength={280}
                         required
                     />
+                    <div className="text-sm text-gray-400 text-right mt-1">
+                        {280 - content.length} characters left
+                    </div>
                 </div>
 
                 {/* Message */}
                 {message && (
                     <p
                         className={`text-center mb-4 rounded-md p-2 ${message.includes("successful")
-                                ? "text-green-500 bg-gray-700"
-                                : "text-red-500 bg-gray-700"
+                            ? "text-green-500 bg-gray-700"
+                            : "text-red-500 bg-gray-700"
                             }`}
                     >
                         {message}

@@ -49,16 +49,21 @@ export default function Home() {
               <>
                 <ul className="space-y-4">
                   {videos.slice(0, 5).map((video) => (
-                    <li key={video._id} className="flex flex-col sm:flex-row bg-gray-900 gap-3">
+                    <li key={video._id} className="flex flex-col sm:flex-row  bg-gray-900 gap-3">
                       <Link to={`/watch/${video._id}`} className="flex flex-col sm:flex-row gap-3 w-full hover:bg-gray-800 transition-all">
                         <img
                           src={video.thumbnail}
                           alt={video.title}
                           className="w-full sm:w-48 h-48 sm:h-28 object-cover rounded"
                         />
-                        <div className="flex flex-col justify-between">
+                        <div className="flex flex-col justify-between p-3">
                           <p className="font-medium text-base line-clamp-2">{video.title}</p>
-                          <p className="text-sm text-gray-400 mt-1">{video.owner?.username}</p>
+                          <p className="text-sm text-gray-400 mt-1">
+                            {video.description.length > 50
+                              ? video.description.substring(0, 50) + '...'
+                              : video.description}
+                          </p>
+                          <p className="text-sm text-blue-500 mt-1 ">{video.owner?.username}</p>
                         </div>
                       </Link>
                     </li>
@@ -85,10 +90,11 @@ export default function Home() {
                   {tweets.slice(0, 5).map(tweet => (
                     <li key={tweet._id}>
                       <Link to={`/tweet/${tweet._id}`} className="block p-3 rounded border border-gray-600 bg-gray-900 hover:bg-gray-800 transition-all">
-                        <p className="font-medium">{tweet.owner?.username}</p>
-                        <p className="text-sm text-gray-400">{tweet.content}</p>
+                        <p className=" font-medium text-blue-500">{tweet.owner?.username}</p>
+                        <p className=" text-sm text-gray-400">{tweet.content}</p>
                       </Link>
                     </li>
+                    
                   ))}
                 </ul>
                 {tweets.length > 5 && (
@@ -134,12 +140,12 @@ export default function Home() {
               </div>
             </div>
             <div className="mt-4 space-y-1 text-sm text-gray-300">
-<p className="text-sm text-muted-foreground">
-  Member Since:
-  <span className="ml-1 font-medium text-black dark:text-white">
-    {dayjs(user.createdAt).format("DD MMMM YYYY")}
-  </span>
-</p>
+              <p className="text-sm text-muted-foreground">
+                Member Since:
+                <span className="ml-1 font-medium text-black dark:text-white">
+                  {dayjs(user.createdAt).format("DD MMMM YYYY")}
+                </span>
+              </p>
             </div>
 
             <Link

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getUserProfile, getChannelStats, getChannelVideos, getWatchHistory } from '../api'
+import { getUserProfile, getChannelStats, getChannelVideos, getWatchHistory, togglePublishStatus } from '../api'
 import dayjs from "dayjs"
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
@@ -11,6 +11,7 @@ const ProfilePage = () => {
   const [history, setHistory] = useState([])
   const [loading, setLoading] = useState(true)
   const [showConfirm, setShowConfirm] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("")
 
   const { logout } = useAuth()
   const navigate = useNavigate()
@@ -23,6 +24,7 @@ const ProfilePage = () => {
     navigate(`/watch/${_id}`);
   };
 
+  // logout
   const handleLogoutClick = () => {
     setShowConfirm(true); // show modal/confirmation
   };
@@ -36,6 +38,7 @@ const ProfilePage = () => {
   const cancelLogout = () => {
     setShowConfirm(false);
   };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +54,11 @@ const ProfilePage = () => {
         setStats(statsRes.data.data);
         setVideos(videosRes.data.data);
       } catch (error) {
+
+        if (error.response?.data?.message === "jwt expired") {
+          setErrorMsg("Session expired. Please log in again.");
+          setTimeout(() => navigate("/login"), 2000);
+        }
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
@@ -67,6 +75,7 @@ const ProfilePage = () => {
         setHistory(res.data.data);
       } catch (error) {
         console.error("Error fetching watch history", error);
+        setErrorMsg(error)
       } finally {
         setLoading(false);
       }
@@ -75,8 +84,32 @@ const ProfilePage = () => {
     fetchHistory();
   }, []);
 
+  const handleTogglePublish = async (videoId) => {
+    try {
+      await togglePublishStatus(videoId);
+
+      // Update local state
+      setVideos((prev) =>
+        prev.map((video) =>
+          video._id === videoId
+            ? { ...video, isPublished: !video.isPublished }
+            : video
+        )
+      );
+    } catch (err) {
+      setErrorMsg(err)
+    }
+  };
+
+
   if (loading) return <p className="text-center py-10 text-gray-400">Loading profile...</p>
-  if (!profile) return <p className="text-center py-10 text-red-500">Profile not found.</p>
+
+  if (!profile) {
+    if (errorMsg) {
+      return <p className="text-center py-10 text-red-500">{errorMsg}</p>
+    }
+    return <p className="text-center py-10 text-red-500">Profile not found.</p>
+  }
 
   return (
     <div className="max-w-5xl mx-auto px-4">
@@ -108,15 +141,23 @@ const ProfilePage = () => {
           </p>
 
           <div className="mt-4 space-x-3">
+            {/* Cross button */}
+            <button
+              className='bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 cursor-pointer'
+              onClick={() =>
+                navigate("/")
+              }
+            >Home</button>
             <button
               onClick={() => handleUpdateProfile()}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer">
+              className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 cursor-pointer">
               Edit Profile
             </button>
             <button
               onClick={handleLogoutClick}
-              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
-            >Logout</button>
+              className="bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 cursor-pointer"
+            >Logout
+            </button>
 
             {showConfirm && (
               <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -202,6 +243,16 @@ const ProfilePage = () => {
                   >
                     Delete
                   </Link>
+                  <button
+                    onClick={() => handleTogglePublish(video._id)}
+                    className={`text-sm px-3 py-1 rounded ${video.isPublished
+                        ? "bg-yellow-500 hover:bg-yellow-600"
+                        : "bg-green-600 hover:bg-green-700"
+                      } text-white`}
+                  >
+                    {video.isPublished ? "Unpublish" : "Publish"}
+                  </button>
+
                 </div>
               </div>
             ))}

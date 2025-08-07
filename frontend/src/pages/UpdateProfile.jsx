@@ -6,6 +6,7 @@ import {
   updateAvatar,
   updateCoverImage,
 } from '../api'
+import { useNavigate } from 'react-router-dom'
 
 const UpdateProfile = ({ user }) => {
   const [fullName, setFullName] = useState(user?.fullName || '')
@@ -18,6 +19,7 @@ const UpdateProfile = ({ user }) => {
   })
 
   const { setUser } = useAuth()
+  const navigate = useNavigate()
 
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -146,8 +148,16 @@ const UpdateProfile = ({ user }) => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-6 text-white bg-gradient-to-br from-gray-800 via-slate-900 to-black rounded-lg shadow-lg mt-5">
+    <div className="max-w-3xl mx-auto p-6 space-y-6 text-white bg-gradient-to-br from-gray-800 via-slate-900 to-black rounded-lg shadow-lg mt-5 relative">
       <h2 className="text-3xl font-bold">Update Profile</h2>
+
+      {/* Cross button */}
+      <div
+      className='absolute top-5 right-5 text-2xl text-red-700 hover:text-red-800 font-bold cursor-pointer bg-gray-950 px-2'
+      onClick={()=>
+        navigate("/")
+      }
+      >X</div>
 
       {/* Feedback Messages */}
       {successMessage && <p className="text-green-400">{successMessage}</p>}

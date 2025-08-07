@@ -49,8 +49,15 @@ const UpdateVideo = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
       <form
         onSubmit={handleUpdate}
-        className="bg-gradient-to-br from-gray-700 via-gray-600 to-gray-800 p-8 rounded-xl shadow-md w-full max-w-md"
+        className="bg-gradient-to-br from-gray-700 via-gray-600 to-gray-800 p-8 rounded-xl shadow-md w-full max-w-md relative"
       >
+        {/* Cross button */}
+        <div
+          className='absolute top-5 right-5 text-2xl text-red-600 hover:text-red-800 font-bold cursor-pointer bg-gray-700 rounded px-2'
+          onClick={() =>
+            navigate("/")
+          }
+        >X</div>
         <h2 className="text-white text-2xl font-bold mb-6 text-center">Update Video</h2>
 
         {/* Title */}
@@ -92,9 +99,8 @@ const UpdateVideo = () => {
 
         {/* Message */}
         {message && (
-          <p className={`text-center mb-4 p-2 rounded ${
-            message.includes("successfully") ? "text-green-500 bg-gray-700" : "text-red-500 bg-gray-700"
-          }`}>
+          <p className={`text-center mb-4 p-2 rounded ${message.includes("successfully") ? "text-green-500 bg-gray-700" : "text-red-500 bg-gray-700"
+            }`}>
             {message}
           </p>
         )}

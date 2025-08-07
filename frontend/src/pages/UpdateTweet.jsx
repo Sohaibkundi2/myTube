@@ -55,8 +55,18 @@ const UpdateTweet = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
       <form
         onSubmit={handleUpdate}
-        className="bg-gray-800 p-8 rounded-xl shadow-md w-full max-w-md"
+        className="bg-gray-800 p-8 rounded-xl shadow-md w-full max-w-md relative"
       >
+
+        {/* Cross button */}
+        <div
+          className='absolute top-5 right-5 text-2xl text-red-600 hover:text-red-800 font-bold cursor-pointer bg-gray-700 rounded px-2'
+          onClick={() =>
+            navigate("/")
+          }
+        >X</div>
+
+
         <h2 className="text-white text-2xl font-bold mb-6 text-center">
           Update Tweet
         </h2>
@@ -83,11 +93,10 @@ const UpdateTweet = () => {
         {/* Message */}
         {message && (
           <p
-            className={`text-center mb-4 rounded p-2 ${
-              message.includes('successfully')
+            className={`text-center mb-4 rounded p-2 ${message.includes('successfully')
                 ? 'text-green-500 bg-gray-700'
                 : 'text-red-500 bg-gray-700'
-            }`}
+              }`}
           >
             {message}
           </p>

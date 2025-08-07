@@ -20,11 +20,11 @@ export const getUserProfile = () => API.get('/users/me');  //Done
 export const registerUser = (formData) => API.post("/users/register", formData); //Done
 export const loginUser = (data) => API.post("/users/login", data); //Done
 export const logoutUser = () => API.get("/users/logout"); //Done
-export const updateUserInfo = (data) => API.patch("/users/profile", data);
-export const changePassword = (data) => API.patch("/users/password", data);
-export const updateAvatar = (formData) => API.patch("/users/avatar", formData);
-export const updateCoverImage = (formData) => API.patch("/users/cover", formData);
-export const getWatchHistory = () => API.get("/users/history");
+export const updateUserInfo = (data) => API.patch("/users/profile", data); //Done
+export const changePassword = (data) => API.patch("/users/password", data); //Done
+export const updateAvatar = (formData) => API.patch("/users/avatar", formData); //Done
+export const updateCoverImage = (formData) => API.patch("/users/cover", formData); //Done
+export const getWatchHistory = () => API.get("/users/history"); //Done
 
 //
 //  TWEET APIs
