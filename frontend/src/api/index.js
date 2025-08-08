@@ -47,8 +47,8 @@ export const togglePublishStatus = (videoId) => API.patch(`/videos/${videoId}/to
 //  COMMENT APIs
 //
 export const addComment = (videoId, data) => API.post(`/comments/${videoId}`, data); //Done
-export const updateComment = (commentId, data) => API.patch(`/comments/update/${commentId}`, data);
-export const deleteComment = (commentId) => API.delete(`/comments/delete/${commentId}`);
+export const updateComment = (commentId, data) => API.patch(`/comments/update/${commentId}`, data); //Done
+export const deleteComment = (commentId) => API.delete(`/comments/delete/${commentId}`); //Done
 export const getComments = (videoId) => API.get(`/comments/${videoId}`); //Done
 
 //
@@ -69,6 +69,6 @@ export const getChannelVideos = (channelId) => API.get(`/dashboard/videos/${chan
 //
 //  SUBSCRIPTION APIs
 //
-export const toggleSubscription = (channelId) => API.post(`/subscriptions/${channelId}/toggle`);
-export const getSubscribers = (channelId) => API.get(`/subscriptions/${channelId}/subscribers`);
-export const getSubscribedChannels = (userId) => API.get(`/subscriptions/${userId}/channels`);
+export const toggleSubscription = (channelId) => API.post(`/subscriptions/${channelId}/toggle`); //Done
+export const getSubscribers = (channelId) => API.get(`/subscriptions/${channelId}/subscribers`);//Done
+export const getSubscribedChannels = (userId) => API.get(`/subscriptions/${userId}/subscriptions`); //Done

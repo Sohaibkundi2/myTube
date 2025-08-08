@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getUserProfile, getChannelStats, getChannelVideos, getWatchHistory, togglePublishStatus } from '../api'
+import { getUserProfile, getChannelStats, getChannelVideos, getWatchHistory, togglePublishStatus, getSubscribedChannels, getSubscribers } from '../api'
 import dayjs from "dayjs"
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
@@ -13,7 +13,11 @@ const ProfilePage = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [errorMsg, setErrorMsg] = useState("")
 
-  const { logout } = useAuth()
+  const [subscribedChannels, setSubscribedChannels] = useState([]);
+  const [mySubscribers, setMySubscribers] = useState([]);
+
+
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
 
   const handleUpdateProfile = () => {
@@ -105,6 +109,35 @@ const ProfilePage = () => {
     }
   };
 
+  // Fetch channels the user has subscribed to
+  useEffect(() => {
+    const fetchSubscribedChannels = async () => {
+      try {
+        const res = await getSubscribedChannels(user._id);
+        const flattened = res.data?.data.map(item => item.channel);
+        setSubscribedChannels(flattened || []);
+      } catch (error) {
+        console.error("Error fetching subscribed channels:", error);
+      }
+    };
+
+    if (user?._id) fetchSubscribedChannels();
+  }, [user?._id]);
+
+  // Fetch users who subscribed to this user (channel)
+  useEffect(() => {
+    const fetchSubscribers = async () => {
+      try {
+        const res = await getSubscribers(user._id);
+        setMySubscribers(res.data?.data || []);
+      } catch (error) {
+        console.error("Error fetching subscribers:", error);
+      }
+    };
+
+    if (user?._id) fetchSubscribers();
+  }, [user?._id]);
+
 
   if (loading) return <p className="text-center py-10 text-gray-400">Loading profile...</p>
 
@@ -119,11 +152,15 @@ const ProfilePage = () => {
     <div className="max-w-5xl mx-auto px-4">
       {/* Cover Image */}
       <div className="h-52 sm:h-64 w-full rounded-lg overflow-hidden mb-6">
-        <img
-          src={profile.coverImage}
-          alt="Cover"
-          className="w-full h-full object-cover"
-        />
+        {profile.coverImage ? (
+          <img
+            src={profile.coverImage}
+            alt="Cover Image"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-r from-[#9faaa6] to-[#29292c]" />
+        )}
       </div>
 
       {/* Profile Info */}
@@ -190,7 +227,7 @@ const ProfilePage = () => {
 
       {/* Channel Stats */}
       {stats && (
-        <div className="mt-10 bg-gray-100 dark:bg-zinc-800 p-6 rounded-lg">
+        <div className="mt-10 bg-gradient-to-r from-[#595b5a] to-[#131217]  p-6 rounded-lg">
           <h2 className="text-xl font-semibold mb-4">Channel Stats</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-sm sm:text-base">
             <div>
@@ -275,6 +312,59 @@ const ProfilePage = () => {
           </div>
         )}
       </div>
+
+      {/* Subscribed Channels */}
+      <div className="px-4 py-6">
+        <h2 className="text-2xl font-bold mb-4">Channels You Subscribed To</h2>
+        {subscribedChannels.length === 0 ? (
+          <p className="text-gray-500">You haven’t subscribed to any channels yet.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {subscribedChannels.map((channel) => (
+              <div key={channel._id} className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow">
+                <div className="flex items-center gap-4">
+                  <img src={channel.avatar} alt={channel.username} className="w-12 h-12 rounded-full object-cover" />
+                  <div>
+                    <h3 className="font-semibold">{channel.fullName}</h3>
+                    <p className="text-sm text-gray-500">@{channel.username}</p>
+                  </div>
+                </div>
+                <Link
+                  to={`/channel/${channel._id}`}
+                  className="mt-3 inline-block text-blue-500 hover:underline text-sm"
+                >
+                  View Channel
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* My Subscribers */}
+      <div className="px-4 py-6">
+        <h2 className="text-2xl font-bold mb-4">Your Subscribers</h2>
+        {mySubscribers.length === 0 ? (
+          <p className="text-gray-500">No one has subscribed to you yet.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {mySubscribers.map((sub) => (
+              <div key={sub._id} className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow flex items-center gap-4">
+                <img
+                  src={sub.subscriber.avatar}
+                  alt={sub.subscriber.username}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-semibold text-blue-400">{sub.subscriber.fullName}</p>
+                  <p className="text-sm text-gray-500">@{sub.subscriber.username}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
     </div>
   )
 }

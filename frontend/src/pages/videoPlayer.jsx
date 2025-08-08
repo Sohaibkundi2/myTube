@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import VideoCard from "../compunents/VideoCard"
 import { useAuth } from "../context/authContext"
-
+import { useNavigate } from "react-router-dom"
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -36,6 +36,7 @@ export default function VideoPlayerPage() {
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   const { user } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,10 +66,17 @@ export default function VideoPlayerPage() {
 
   useEffect(() => {
     const fetchSubscribers = async () => {
-      if (video?.owner?._id) {
+      if (video?.owner?._id && user?._id) {
         try {
           const res = await getSubscribers(video.owner._id);
-          setSubscribers(res.data?.data || []);
+          const subs = res.data?.data || [];
+
+          setSubscribers(subs);
+          const isUserSubscribed = subs.some(sub => sub.subscriber._id === user._id);
+          setIsSubscribed(isUserSubscribed);
+
+          console.log("Subscribers:", subs);
+          console.log("Is subscribed:", isUserSubscribed);
         } catch (err) {
           console.error("Failed to load subscribers:", err);
         }
@@ -76,7 +84,8 @@ export default function VideoPlayerPage() {
     };
 
     fetchSubscribers();
-  }, [video?.owner?._id]);
+  }, [video?.owner?._id, user?._id]);
+
 
 
 
@@ -91,6 +100,11 @@ export default function VideoPlayerPage() {
   };
 
   const handleSubscribe = async () => {
+
+    if (!user) {
+      alert("Please login to subscribe.");
+      navigate('/login')
+    }
     try {
       await toggleSubscription(video.owner._id);
       setIsSubscribed((prev) => !prev);
@@ -112,7 +126,6 @@ export default function VideoPlayerPage() {
     try {
       const res = await addComment(videoId, { content: newComment });
       setComments((prev) => [res.data.data, ...prev]);
-      console.log(res.data.data)
       setNewComment("");
     } catch (err) {
       console.error("Comment error", err);
@@ -205,15 +218,29 @@ export default function VideoPlayerPage() {
             </button>
             <button
               onClick={handleSubscribe}
-              className={`btn btn-sm ${isSubscribed ? "btn-success" : "btn-outline"}`}
+              disabled={!user}
+              className={`btn btn-sm ${isSubscribed ? "btn-success" : "btn-outline"} ${!user ? "opacity-50 cursor-not-allowed" : ""}`}
             >
-              {isSubscribed ? "Subscribed" : "Subscribe"}
+              {!user ? "Login to Subscribe" : isSubscribed ? "Subscribed" : "Subscribe"}
             </button>
             <p className="text-sm text-gray-500">
               {subscribers.length} subscriber{subscribers.length !== 1 && "s"}
             </p>
           </div>
         </div>
+
+        {/* Comment Input Form */}
+        <form onSubmit={handleAddComment} className="flex flex-col sm:flex-row gap-2 mt-4">
+          <input
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="input w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Add a comment..."
+          />
+          <button type="submit" className="btn btn-primary w-full sm:w-auto">
+            Add Commnet
+          </button>
+        </form>
 
         {/* Comment Form */}
         <div className="space-y-4">
@@ -233,7 +260,7 @@ export default function VideoPlayerPage() {
                 <div className="flex-1 space-y-1">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
                     <div>
-                      <p className="font-semibold text-sm">{c.owner?.fullName}</p>
+                      <p className="font-semibold text-blue-500 text-sm">{c.owner?.fullName}</p>
                       <p className="text-xs text-gray-500">@{c.owner?.username}</p>
                     </div>
                     <span className="text-xs text-gray-500">{dayjs(c.createdAt).fromNow()}</span>
@@ -264,7 +291,7 @@ export default function VideoPlayerPage() {
                       </div>
                     </form>
                   ) : (
-                    <p className="text-sm text-gray-700 break-words">{c.content}</p>
+                    <p className="text-sm text-gray-300 break-words">{c.content}</p>
                   )}
                 </div>
 
