@@ -80,6 +80,8 @@ const updateComment = asyncHandler(async (req, res) => {
     comment.content = content;
     await comment.save();
 
+    await comment.populate("owner", "username avatar");
+
     return res
         .status(200)
         .json(new ApiResponse(200, comment, "Comment updated successfully"));

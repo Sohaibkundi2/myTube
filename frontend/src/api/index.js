@@ -46,10 +46,10 @@ export const togglePublishStatus = (videoId) => API.patch(`/videos/${videoId}/to
 //
 //  COMMENT APIs
 //
-export const addComment = (videoId, data) => API.post(`/comments/${videoId}`, data);
-export const updateComment = (commentId, data) => API.patch(`/comments/${commentId}`, data);
-export const deleteComment = (commentId) => API.delete(`/comments/${commentId}`);
-export const getComments = (videoId) => API.get(`/comments/${videoId}`);
+export const addComment = (videoId, data) => API.post(`/comments/${videoId}`, data); //Done
+export const updateComment = (commentId, data) => API.patch(`/comments/update/${commentId}`, data);
+export const deleteComment = (commentId) => API.delete(`/comments/delete/${commentId}`);
+export const getComments = (videoId) => API.get(`/comments/${videoId}`); //Done
 
 //
 //  LIKE APIs

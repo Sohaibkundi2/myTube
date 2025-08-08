@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import VideoCard from "../compunents/VideoCard"
+import { useAuth } from "../context/authContext"
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -14,7 +15,9 @@ import {
   addComment,
   toggleVideoLike,
   toggleSubscription,
-  getSubscribers
+  getSubscribers,
+  deleteComment,
+  updateComment
 } from "../api"
 
 
@@ -26,8 +29,13 @@ export default function VideoPlayerPage() {
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedContent, setEditedContent] = useState("");
+
   const [subscribers, setSubscribers] = useState([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const { user } = useAuth()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,6 +119,43 @@ export default function VideoPlayerPage() {
     }
   };
 
+  // edit comment 
+  const startEditing = (id, content) => {
+    setEditingCommentId(id);
+    setEditedContent(content);
+  };
+
+  const cancelEditing = () => {
+    setEditingCommentId(null);
+    setEditedContent("");
+  };
+
+
+  const handleUpdateComment = async (e, commentId) => {
+    e.preventDefault();
+    try {
+      const res = await updateComment(commentId, { content: editedContent });
+      setComments((prev) =>
+        prev.map((c) => (c._id === commentId ? res.data.data : c))
+      );
+      cancelEditing();
+    } catch (err) {
+      console.error("Update failed", err);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await deleteComment(commentId);
+      setComments((prev) => prev.filter((c) => c._id !== commentId));
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
+
+
+
+
 
 
 
@@ -171,48 +216,78 @@ export default function VideoPlayerPage() {
         </div>
 
         {/* Comment Form */}
-        <form onSubmit={handleAddComment} className="mt-6 flex gap-3">
-          <input
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            className="input input-bordered flex-1"
-            placeholder="Add a comment..."
-          />
-          <button type="submit" className="btn btn-primary">
-            Post
-          </button>
-        </form>
-
-        {/* Comments List */}
-
         <div className="space-y-4">
           {comments.length === 0 ? (
             <p className="text-sm text-gray-500">No comments yet.</p>
           ) : (
             comments.map((c) => (
-              <div key={c._id} className="bg-base-200 p-4 rounded flex gap-4">
-                <img
-                  src={c.owner?.avatar}
-                  alt={c.owner?.username}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
+              <div key={c._id} className="bg-base-200 p-4 rounded flex flex-col sm:flex-row gap-4">
+                <div className="flex-shrink-0">
+                  <img
+                    src={c.owner?.avatar || "/default-avatar.png"}
+                    alt={c.owner?.username}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                </div>
+
                 <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
                     <div>
                       <p className="font-semibold text-sm">{c.owner?.fullName}</p>
                       <p className="text-xs text-gray-500">@{c.owner?.username}</p>
                     </div>
-                              <span className="text-xs text-gray-500">
-            {dayjs(c.createdAt).fromNow()}
-          </span>
+                    <span className="text-xs text-gray-500">{dayjs(c.createdAt).fromNow()}</span>
                   </div>
-                  <p className="text-sm text-gray-700">{c.content}</p>
+
+                  {editingCommentId === c._id ? (
+                    <form
+                      onSubmit={(e) => handleUpdateComment(e, c._id)}
+                      className="flex flex-col sm:flex-row gap-2 mt-2 w-full"
+                    >
+                      <input
+                        type="text"
+                        value={editedContent}
+                        onChange={(e) => setEditedContent(e.target.value)}
+                        className="input input-sm w-full focus:outline-none focus:ring-1 focus:ring-green-300 focus:border-transparent sm:flex-1"
+                      />
+                      <div className="flex flex-col gap-2">
+                        <button type="submit" className="btn btn-sm btn-success w-full sm:w-auto">
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          onClick={cancelEditing}
+                          className="btn btn-sm btn-ghost w-full sm:w-auto"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <p className="text-sm text-gray-700 break-words">{c.content}</p>
+                  )}
                 </div>
+
+                {c.owner._id === user._id && (
+                  <div className="flex flex-col gap-2 mt-2 sm:mt-0">
+                    <button
+                      onClick={() => startEditing(c._id, c.content)}
+                      className="btn btn-xs btn-outline border border-gray-400 w-full sm:w-auto"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteComment(c._id)}
+                      className="btn btn-xs btn-error w-full sm:w-auto"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
               </div>
             ))
           )}
         </div>
-
 
       </div>
 
