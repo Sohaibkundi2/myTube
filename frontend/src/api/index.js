@@ -1,8 +1,9 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:3000/api/v1",
+  baseURL: import.meta.env.VITE_API_URL,
 });
+
 
 //  Attach token to each request automatically
 API.interceptors.request.use((config) => {
@@ -54,11 +55,9 @@ export const getComments = (videoId) => API.get(`/comments/${videoId}`); //Done
 //
 //  LIKE APIs
 //
-export const toggleVideoLike = (videoId) => API.patch(`/likes/videos/${videoId}/toggle`);
-export const toggleCommentLike = (commentId) => API.post(`/likes/comment/${commentId}`);
-export const toggleTweetLike = (tweetId) => API.post(`/likes/tweet/${tweetId}`);
-export const getLikedVideos = () => API.get("/likes/videos");
-export const getVideoLikes = (videoId) => API.get(`/likes/videos/${videoId}/count`);
+export const toggleVideoLike = (videoId) => API.patch(`/likes/videos/${videoId}/toggle`); //Commented
+export const getLikedVideos = () => API.get("/likes/videos"); //Commented
+export const getVideoLikes = (videoId) => API.get(`/likes/videos/${videoId}/count`); //Commented
 
 //
 //  DASHBOARD APIs
@@ -72,3 +71,14 @@ export const getChannelVideos = (channelId) => API.get(`/dashboard/videos/${chan
 export const toggleSubscription = (channelId) => API.post(`/subscriptions/${channelId}/toggle`); //Done
 export const getSubscribers = (channelId) => API.get(`/subscriptions/${channelId}/subscribers`);//Done
 export const getSubscribedChannels = (userId) => API.get(`/subscriptions/${userId}/subscriptions`); //Done
+
+//
+//  PLAYLIST APIs
+//
+export const createPlaylist = (data) => API.post("/playlists", data); // Create new playlist
+export const getUserPlaylists = (userId) => API.get(`/playlists/user/${userId}`); // Get playlists by user
+export const getPlaylistById = (playlistId) => API.get(`/playlists/${playlistId}`); // Get one playlist
+export const addVideoToPlaylist = (playlistId, videoId) => API.patch(`/playlists/${playlistId}/add/${videoId}`); // Add video
+export const removeVideoFromPlaylist = (playlistId, videoId) => API.patch(`/playlists/${playlistId}/remove/${videoId}`); // Remove video
+export const deletePlaylist = (playlistId) => API.delete(`/playlists/${playlistId}`); // Delete
+export const updatePlaylist = (playlistId, data) => API.put(`/playlists/${playlistId}`, data); // Update name/description

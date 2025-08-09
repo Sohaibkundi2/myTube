@@ -19,13 +19,15 @@ import UploadTweet from './pages/UploadTweet'
 import UpdateTweet from './pages/UpdateTweet'
 import DeleteTweet from './pages/DeleteTweet'
 import UpdateProfile from './pages/UpdateProfile'
+import ProtectedRoute from './compunents/ProtectedRoute'
 
 function App() {
 
   return (
-        <div className="min-h-screen bg-gray-900">
-        <Navbar />
+    <div className="min-h-screen bg-gray-900">
+      <Navbar />
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -33,15 +35,20 @@ function App() {
         <Route path="/watch/:videoId" element={<VideoPlayerPage />} />
         <Route path="/tweet/:tweetId" element={<TweetPage />} />
         <Route path="/tweets" element={<TweetPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/upload-video" element={<UploadVideo />} />
-        <Route path="/update-video/:videoId" element={<UpdateVideo />} />
-        <Route path="/delete-video/:videoId" element={<DeleteVideo />}/>
-        <Route path="/upload-tweet" element={<UploadTweet />} />
-        <Route path="/update-tweet/:tweetId" element={<UpdateTweet />} />
-        <Route path="/delete-tweet/:tweetId" element={<DeleteTweet />}/>
-        <Route path="/update-profile" element={<UpdateProfile />}/>
+
+        {/* Secure routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/upload-video" element={<UploadVideo />} />
+          <Route path="/update-video/:videoId" element={<UpdateVideo />} />
+          <Route path="/delete-video/:videoId" element={<DeleteVideo />} />
+          <Route path="/upload-tweet" element={<UploadTweet />} />
+          <Route path="/update-tweet/:tweetId" element={<UpdateTweet />} />
+          <Route path="/delete-tweet/:tweetId" element={<DeleteTweet />} />
+          <Route path="/update-profile" element={<UpdateProfile />} />
+        </Route>
       </Routes>
+
       <Footer />
     </div>
   )

@@ -12,11 +12,6 @@ export default function Navbar() {
 
   const navigate = useNavigate()
 
-  const handleLogout = () => {
-    logout()
-    navigate("/login")
-  }
-
 
   //logout
   const handleLogoutClick = () => {
@@ -45,7 +40,7 @@ export default function Navbar() {
         <ul className="menu menu-horizontal px-1">
           <li><Link to="/">Home</Link></li>
           <li><Link to="/videos">Videos</Link></li>
-          <li><Link to="/playlists">Playlists</Link></li>
+          {/* <li><Link to="/playlists">Playlists</Link></li> */}
           <li><Link to="/tweets">Tweets</Link></li>
         </ul>
       </div>
@@ -116,7 +111,7 @@ export default function Navbar() {
           <ul className="menu menu-vertical w-full  space-y-2">
             <li><Link to="/">Home</Link></li>
             <li><Link to="/videos">Videos</Link></li>
-            <li><Link to="/playlists">Playlists</Link></li>
+            {/* <li><Link to="/playlists">Playlists</Link></li> */}
             <li><Link to="/tweets">Tweets</Link></li>
             {user ? (
               <>

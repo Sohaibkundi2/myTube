@@ -91,7 +91,11 @@ export default function Home() {
                     <li key={tweet._id}>
                       <Link to={`/tweet/${tweet._id}`} className="block p-3 rounded border border-gray-600 bg-gray-900 hover:bg-gray-800 transition-all">
                         <p className=" font-medium text-blue-500">{tweet.owner?.username}</p>
-                        <p className=" text-sm text-gray-400">{tweet.content}</p>
+                        <p className=" text-sm text-gray-400">{
+                        tweet.content.length > 180 
+                          ? tweet.content.substring(0, 180) + '...'
+                          : tweet.content
+                        }</p>
                       </Link>
                     </li>
 

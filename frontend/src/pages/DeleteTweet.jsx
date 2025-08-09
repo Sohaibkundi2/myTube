@@ -24,7 +24,13 @@ const DeleteTweet = () => {
         setMessage("Session expired. Please log in again.");
         setTimeout(() => {
           navigate("/login");
-        }, 2000);
+        }, 2000)  
+      }
+      if (error.response?.status === 401) {
+        setMessage("Please log in to continue.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000)  
       }
     } finally {
       setLoading(false);
