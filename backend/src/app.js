@@ -9,11 +9,13 @@ dotenv.config()
 
 app.use(cors({
   origin: [
-    'https://my-tube-red.vercel.app', 
-    'http://localhost:5173'             
+    'http://localhost:3000',
+    'https://my-tube-git-main-sohaibs-projects-442454ff.vercel.app',
+    'https://my-tube-red.vercel.app'
   ],
   credentials: true
 }));
+
 
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
