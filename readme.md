@@ -3,6 +3,9 @@
 VidTwit is a full-featured backend and frontend for a YouTube-style video sharing platform. It supports authentication, video uploads, comments, subscriptions, and more..., Along with posting like X(twitter),  built using **Node.js, Express.js, MongoDB, Cloudinary, JWT** on the backend, and **React.js, Tailwind CSS, Axios** on the frontend.
 
 ---
+# Preview
+[click to check live](https://my-tube-red.vercel.app/)
+
 
 ## Features
 
@@ -65,11 +68,6 @@ MY_CLOUD_API_KEY=your_api_key
 MY_CLOUD_SECRET_KEY=your_api_secret
 
 
-	
-MY_CLOUD_NAME = dejac5bej
-MY_CLOUD_API_KEY = 786663661749966
-MY_CLOUD_SECRET_KEY = I3jG6r668DoiO-CmtJ0uo7AxvkQ
-
 NODE_ENV=development
 ```
 
@@ -86,7 +84,7 @@ VITE_BACKEND_URL=http://localhost:3000/api/v1
 ### Backend
 ```bash
 # Clone the repo
-git clone https://github.com/sohaibkundi2/vidtwit.git
+git clone https://github.com/sohaibkundi2/myTube.git
 cd vidtwit/backend
 
 # Install dependencies
