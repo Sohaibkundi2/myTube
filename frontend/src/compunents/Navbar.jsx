@@ -32,7 +32,7 @@ export default function Navbar() {
     <div className="navbar bg-base-100 shadow px-4 sticky top-0 z-50">
       {/* Left: Logo */}
       <div className="flex-1">
-        <Link to="/" className="text-xl font-bold text-primary">myTubeX</Link>
+        <Link to="/" className="text-xl font-bold text-primary">vidTwit</Link>
       </div>
 
       {/* Center: Nav Links (hidden on small screens) */}
