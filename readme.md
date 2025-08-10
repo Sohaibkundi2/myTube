@@ -1,80 +1,93 @@
-#  myTube - Video Platform Backend
+# VidTwit - Video Platform
 
-myTube is a full-featured backend for a YouTube-style video sharing platform. It supports authentication, video uploads, likes, comments, playlists, subscriptions, and more — built using **Node.js, Express.js, MongoDB, Cloudinary, and JWT**.
-
----
-
-##  Features
-
--  JWT-based Authentication (Register, Login, Refresh, Logout)
--  Profile Management (avatar, cover image, password update)
--  Video CRUD (upload, get, update, delete, publish toggle)
--  Comments System (create, read, update, delete, paginated)
--  Likes System (toggle likes on videos, comments, tweets)
--  Subscriptions (follow/unfollow channels, fetch subscribers)
--  Playlists (create, update, delete, add/remove videos)
--  Channel Stats (views, likes, total videos/subscribers)
--  Cloudinary Integration (for image/video uploads)
--  Async handlers, custom API response/error utilities
--  Pagination support via Mongoose plugins
--  Modular code structure & middleware system
+VidTwit is a full-featured backend and frontend for a YouTube-style video sharing platform. It supports authentication, video uploads, comments, subscriptions, and more..., Along with posting like X(twitter),  built using **Node.js, Express.js, MongoDB, Cloudinary, JWT** on the backend, and **React.js, Tailwind CSS, Axios** on the frontend.
 
 ---
 
-##  Tech Stack
+## Features
 
-| Tech       | Description                     |
-|------------|---------------------------------|
-| Node.js    | Runtime environment             |
-| Express.js | Web framework                   |
-| MongoDB    | NoSQL database                  |
-| Mongoose   | ODM for MongoDB                 |
-| Cloudinary | Media file upload & storage     |
-| JWT        | Secure authentication           |
-| Multer     | File upload middleware          |
+### Backend
+- JWT-based Authentication (Register, Login, Refresh, Logout)
+- Profile Management (avatar, cover image, password update)
+- Video CRUD (upload, get, update, delete, publish toggle)
+- Tweet CRUD (upload, get, update, delete)
+- Comments System (create, read, update, delete, paginated)
+- Likes System (toggle likes on videos)
+- Subscriptions (subscribe/unsubscribe, channels, fetch subscribers)
+- Playlists (create, update, delete, add/remove videos)
+- Channel Stats (views, likes, total videos/subscribers)
+- Cloudinary Integration (for image/video uploads)
+- Async handlers, custom API response/error utilities
+- Pagination support via Mongoose plugins
+- Modular code structure & middleware system
 
----
-
-##  Project Structure
-
-```
-myTube/
-├── controllers/
-├── models/
-├── routes/
-├── middlewares/
-├── utils/
-├── uploads/
-├── config/
-├── app.js
-├── server.js
-└── README.md
-```
+### Frontend (excluding Likes and Playlists)
+- User Authentication (Login/Register, logout)
+- Profile Management (avatar, cover image, password) and also updation
+- Video Upload, Watch, and Browse Pages (update, delete, publish)
+- Tweet Upload, Watch, and Browse Pages (update, delete)
+- Comment Section with Live Updates
+- Subscriptions (subscribe/unsubscribe channels, view subscribers)
+- Channel Pages with Statistics
+- Responsive UI (mobile and desktop)
+- API integration with backend services
 
 ---
 
-##  Environment Variables
+## Tech Stack
 
+| Layer       | Technologies |
+|-------------|--------------|
+| Backend     | Node.js, Express.js, MongoDB, Mongoose, Cloudinary, JWT, Multer |
+| Frontend    | React.js, Tailwind CSS, Axios, React Router |
+| Database    | MongoDB |
+
+---
+
+---
+
+## Environment Variables
+
+### Backend
 Create a `.env` file with the following keys:
-
 ```env
 PORT=3000
+
 MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-JWT_REFRESH_SECRET=your_refresh_token_secret
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+
+ACCESS_TOKEN_SECRET=your_jwt_secret
+ACCESS_TOKEN_EXPIRY=1d
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+REFRESH_TOKEN_EXPIRY=10d
+
+MY_CLOUD_NAME=your_cloud_name
+MY_CLOUD_API_KEY=your_api_key
+MY_CLOUD_SECRET_KEY=your_api_secret
+
+
+	
+MY_CLOUD_NAME = dejac5bej
+MY_CLOUD_API_KEY = 786663661749966
+MY_CLOUD_SECRET_KEY = I3jG6r668DoiO-CmtJ0uo7AxvkQ
+
+NODE_ENV=development
+```
+
+### Frontend
+Create a `.env` file with the following keys:
+```env
+VITE_BACKEND_URL=http://localhost:3000/api/v1
 ```
 
 ---
 
-##  Run Locally
+## Run Locally
 
+### Backend
 ```bash
 # Clone the repo
-git clone https://github.com/sohaibkundi2/myTube.git
-cd myTube
+git clone https://github.com/sohaibkundi2/vidtwit.git
+cd vidtwit/backend
 
 # Install dependencies
 npm install
@@ -87,89 +100,31 @@ npm run dev
 
 Server should start on `http://localhost:3000`
 
----
+### Frontend
+```bash
+cd ../frontend
 
-##  API Endpoints
+# Install dependencies
+npm install
 
-> Organized under `/api/v1`
+# Setup .env file (see above)
 
-### Auth
-- `POST /auth/register`
-- `POST /auth/login`
-- `POST /auth/refresh-token`
-- `POST /auth/logout`
+# Run the frontend
+npm run dev
+```
 
-### Users
-- `GET /users/profile`
-- `PATCH /users/avatar`
-- `PATCH /users/password`
-
-### Videos
-- `POST /videos`
-- `GET /videos`
-- `GET /videos/:id`
-- `PATCH /videos/:id`
-- `DELETE /videos/:id`
-- `PATCH /videos/publish/:id`
-
-### Comments
-- `POST /comments/:videoId`
-- `GET /comments/:videoId`
-- `PATCH /comments/:commentId`
-- `DELETE /comments/:commentId`
-
-### Likes
-- `POST /likes/video/:videoId`
-- `POST /likes/comment/:commentId`
-
-### Subscriptions
-- `POST /subscribe/:channelId`
-- `GET /subscribers/:channelId`
-- `GET /subscriptions/:subscriberId`
-
-### Playlists
-- `POST /playlists`
-- `GET /playlists/user/:userId`
-- `GET /playlists/:playlistId`
-- `PATCH /playlists/:playlistId/add/:videoId`
-- `PATCH /playlists/:playlistId/remove/:videoId`
-- `PUT /playlists/:playlistId`
-- `DELETE /playlists/:playlistId`
-
-### Channel Stats
-- `GET /channels/:channelId/stats`
-- `GET /channels/:channelId/videos`
-
----
-
-##  Security and Middleware
-
-- `verifyJWT` – Protects private routes
-- `asyncHandler` – Wraps all async controller logic
-- `ApiError/ApiResponse` – Unified error and success response handling
-- `cloudinary.js` – Upload & delete media from Cloudinary
-
----
-
-##  Media Uploads
-
-- Avatar, coverImage, and video files are uploaded to **Cloudinary**
-- Uses `multer` + `storage.temp` directory for local temp storage
-
----
-
-
----
-
-##  Author
-
-**Sohaib Kundi**  
-BSCS, 4th Semester — Gomal University (Sub Campus Tank)  
-MERN Stack Developer | Backend-focused | Cloudinary Ninja  
-🔗 [LinkedIn](https://linkedin.com/in/sohaibkundi2)  
-🔗 [GitHub](https://github.com/sohaibkundi2)
+Frontend should start on `http://localhost:5173`
 
 ---
 
 
 
+---
+
+## Author
+
+**Muhammad Sohaib**  
+- BSCS, 4th Semester — Tank Campus GU 
+- MERN Stack Developer | Backend-focused  
+- LinkedIn: [https://linkedin.com/in/sohaibkundi2](https://linkedin.com/in/sohaibkundi2)  
+- GitHub: [https://github.com/sohaibkundi2](https://github.com/sohaibkundi2)
