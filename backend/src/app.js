@@ -9,7 +9,7 @@ dotenv.config()
 
 app.use(cors({
   origin: [
-    'https://my-tube-red.vercel.app/', 
+    'https://my-tube-red.vercel.app', 
     'http://localhost:5173'             
   ],
   credentials: true
