@@ -39,9 +39,9 @@ export default function Home() {
       {loading ? (
         <p className="text-gray-400">Loading content...</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
+        <div className="grid bg grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
           {/* Videos Section */}
-          <div className="p-6 bg-base-200 rounded-xl shadow">
+          <div className="p-6 bg-gray-950 text-white/90 rounded-xl shadow">
             <h2 className="text-xl font-semibold mb-4">Latest Videos</h2>
             {videos.length === 0 ? (
               <p className="text-gray-400">No videos available.</p>
@@ -80,7 +80,7 @@ export default function Home() {
 
 
           {/* Tweets Section */}
-          <div className="p-6 bg-base-200 rounded-xl shadow">
+          <div className="p-6 bg-gray-950 text-white/90 rounded-xl shadow">
             <h2 className="text-xl font-semibold mb-4">Recent Tweets</h2>
             {tweets.length === 0 ? (
               <p className="text-gray-400">No tweets available.</p>
@@ -112,7 +112,7 @@ export default function Home() {
 
 
           {/* Upload Section */}
-          <div className="p-6 bg-base-200 rounded-xl shadow flex flex-col justify-between">
+          <div className="p-6 bg-gray-950 text-white/90 rounded-xl shadow flex flex-col justify-between">
             <h2 className="text-xl font-semibold mb-4">Upload a New Video</h2>
             <p className="text-gray-400 mb-4">Share your creativity with the world!</p>
             <Link to="/upload-video" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition w-max">
@@ -120,7 +120,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="p-6 bg-base-200 rounded-xl shadow flex flex-col justify-between">
+          <div className="p-6 bg-gray-950 text-white/90 rounded-xl shadow flex flex-col justify-between">
             <h2 className="text-xl font-semibold mb-4">Post a Tweet</h2>
             <p className="text-gray-400 mb-4">Got something to say? Share your thoughts.</p>
             <Link to="/upload-tweet" className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition w-max">
@@ -132,7 +132,7 @@ export default function Home() {
           {/* Profile Section */}
           {user ? (
             // Profile Section (shown only if user is logged in)
-            <div className="p-6 bg-base-200 rounded-xl shadow">
+            <div className="p-6 bg-gray-950 text-white/90 rounded-xl shadow">
               <h2 className="text-xl font-semibold mb-4">Your Profile</h2>
               <div className="flex items-center gap-4">
                 <img
@@ -164,7 +164,7 @@ export default function Home() {
               </Link>
             </div>
           ) : (
-            <div className="p-6 bg-base-200 rounded-xl shadow text-center">
+            <div className="p-6 bg-gray-950 text-white/90 rounded-xl shadow text-center">
               <p className="text-gray-500">Please log in to view your profile.</p>
               <Link
                 to="/login"

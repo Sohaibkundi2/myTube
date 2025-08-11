@@ -45,7 +45,7 @@ export default function Register() {
 
     try {
       setLoading(true)
-      const res = await axios.post("http://localhost:3000/api/v1/users/register", form, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/login`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       })
 

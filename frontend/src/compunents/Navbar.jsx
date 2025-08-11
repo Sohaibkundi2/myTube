@@ -29,19 +29,20 @@ export default function Navbar() {
   };
 
   return (
-    <div className="navbar bg-base-100 shadow px-4 sticky top-0 z-50">
+    <div className="navbar bg-gray-950 text-white/100 shadow px-4 sticky top-0 z-50">
+
       {/* Left: Logo */}
       <div className="flex-1">
         <Link to="/" className="text-xl font-bold text-primary">vidTwit</Link>
       </div>
 
       {/* Center: Nav Links (hidden on small screens) */}
-      <div className="hidden md:flex md:flex-1 md:justify-center">
-        <ul className="menu menu-horizontal px-1">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/videos">Videos</Link></li>
-          {/* <li><Link to="/playlists">Playlists</Link></li> */}
-          <li><Link to="/tweets">Tweets</Link></li>
+      <div className="hidden md:flex md:flex-1 md:justify-center ">
+        <ul className="menu menu-horizontal px-1 ">
+          <li  className="hover:bg-gray-800 rounded-md"><Link to="/">Home</Link></li>
+          <li  className="hover:bg-gray-800 rounded-md"><Link to="/videos">Videos</Link></li>
+          {/* <li  className="hover:bg-gray-800 rounded-md"><Link to="/playlists">Playlists</Link></li> */}
+          <li  className="hover:bg-gray-800 rounded-md"><Link to="/tweets">Tweets</Link></li>
         </ul>
       </div>
 
@@ -65,12 +66,12 @@ export default function Navbar() {
 
                 {showConfirm && (
                   <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div className="bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-xl">
+                    <div className="bg-neutral-800 p-6 rounded-lg shadow-xl">
                       <p className=" mb-4">Are you sure you want to logout?</p>
                       <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={cancelLogout}
-                          className="bg-gray-300 dark:bg-gray-700 px-2 py-1 rounded"
+                          className="bg-gray-300 dark:bg-gray-800 px-2 py-1 rounded"
                         >
                           Cancel
                         </button>
@@ -107,7 +108,7 @@ export default function Navbar() {
 
       {/* Mobile dropdown menu */}
       {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-base-100 p-4 z-50 md:hidden border-t">
+        <div className="absolute top-16 left-0 w-full bg-gray-600 text-white/100  p-4 z-50 md:hidden border-t">
           <ul className="menu menu-vertical w-full  space-y-2">
             <li><Link to="/">Home</Link></li>
             <li><Link to="/videos">Videos</Link></li>
@@ -126,7 +127,7 @@ export default function Navbar() {
 
                   {showConfirm && (
                     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                      <div className="bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-xl">
+                      <div className="bg-neutral-800 p-6 rounded-lg shadow-xl">
                         <p className="text-lg font-semibold mb-4">Are you sure you want to logout?</p>
                         <div className="flex items-center justify-center gap-4">
                           <button
