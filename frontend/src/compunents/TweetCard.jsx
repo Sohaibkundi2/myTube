@@ -17,7 +17,7 @@ const TweetCard = ({ tweet, currentUserId }) => {
 
   return (
     <div
-      className="relative group w-full bg-base-100 rounded-xl p-4 shadow hover:shadow-lg transition cursor-pointer"
+      className="relative group w-full  rounded-xl p-4 shadow hover:shadow-lg transition cursor-pointer text-white/90 bg-gray-950"
       onClick={handleCardClick}
     >
       {/* Tweet Content */}

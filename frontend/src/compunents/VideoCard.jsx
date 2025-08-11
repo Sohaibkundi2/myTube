@@ -21,7 +21,7 @@ const VideoCard = ({ video, currentUserId }) => {
 
   return (
     <div
-      className="relative group flex flex-col gap-4 w-full bg-base-100 p-3 rounded-xl shadow hover:shadow-lg transition-shadow cursor-pointer"
+      className="relative group flex flex-col gap-4 w-full p-3 rounded-xl shadow hover:shadow-lg transition-shadow cursor-pointer text-white/90 bg-gray-800"
       onClick={handleCardClick}
     >
       {/* Thumbnail */}

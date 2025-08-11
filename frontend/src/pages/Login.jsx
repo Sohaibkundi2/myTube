@@ -41,8 +41,8 @@ try {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 via-slate-900 to-black">
-      <div className="max-w-md w-full  p-6 rounded-lg bg-gradient-to-br from-gray-700 via-gray-500 to-gray-600 shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 via-slate-900">
+      <div className="max-w-md w-full  p-6 rounded-lg bg-gradient-to-br from-gray-950 via-slate-600 to-black shadow-lg">
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
         {error && <div className="alert alert-error mb-4">{error}</div>}
 

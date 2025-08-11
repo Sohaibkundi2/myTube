@@ -45,7 +45,7 @@ export default function Register() {
 
     try {
       setLoading(true)
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/login`, form, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/users/register`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       })
 
@@ -58,8 +58,8 @@ export default function Register() {
   }
 
   return (
-      <div className="max-w-md mx-auto mt-10 p-6  rounded-xl shadow-md bg-gradient-to-br from-gray-700 via-gray-500 to-gray-600">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Register</h2>
+      <div className="max-w-md mx-auto mt-10 p-6  rounded-xl shadow-md bg-gradient-to-br from-gray-950 via-slate-600 to-black">
+        <h2 className="text-2xl font-semibold mb-4 text-center text-white">Register</h2>
 
         {error && (
           <div className="alert alert-error text-sm mb-4">
@@ -99,7 +99,7 @@ export default function Register() {
 
           <div>
             <label className="label">
-              <span className="label-text">Avatar (required)</span>
+              <span className="label-text text-white">Avatar (required)</span>
             </label>
             <input
               type="file"
@@ -111,7 +111,7 @@ export default function Register() {
 
           <div>
             <label className="label">
-              <span className="label-text">Cover Image (optional)</span>
+              <span className="label-text text-white">Cover Image (optional)</span>
             </label>
             <input
               type="file"

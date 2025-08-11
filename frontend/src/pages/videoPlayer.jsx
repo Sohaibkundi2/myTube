@@ -226,7 +226,7 @@ export default function VideoPlayerPage() {
   if (!video) return <div className="p-6 text-center">Video not found.</div>
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 container mx-auto px-4 py-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 container mx-auto px-4 py-6 text-white/90">
       {/* Main Video Player and Info */}
       <div className="lg:col-span-2 space-y-6">
         {/* Video Player */}
@@ -310,7 +310,7 @@ export default function VideoPlayerPage() {
           <input
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="input w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="input w-full focus:outline-none focus:ring-2 text-white/90 bg-gray-800 focus:ring-blue-500 focus:border-transparent"
             placeholder="Add a comment..."
           />
           <button type="submit" className="btn btn-primary w-full sm:w-auto">
@@ -324,7 +324,7 @@ export default function VideoPlayerPage() {
             <p className="text-sm text-gray-500">No comments yet.</p>
           ) : (
             comments.map((c) => (
-              <div key={c._id} className="bg-base-200 p-4 rounded flex flex-col sm:flex-row gap-4">
+              <div key={c._id} className=" p-4 rounded flex flex-col sm:flex-row gap-4 text-white/90 bg-gray-950">
                 <div className="flex-shrink-0">
                   <img
                     src={c.owner?.avatar || "/default-avatar.png"}
@@ -395,7 +395,7 @@ export default function VideoPlayerPage() {
       </div>
 
       {/* Sidebar with Suggestions */}
-      <div className="space-y-4">
+      <div className="space-y-4 ">
         <h3 className="text-lg font-semibold">Up next</h3>
         {otherVideos.length === 0 ? (
           <p className="text-gray-500">No other videos found.</p>

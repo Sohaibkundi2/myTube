@@ -9,7 +9,7 @@ dotenv.config()
 
 app.use(cors({
   origin: [
-    'http://localhost:3000',
+    'http://localhost:5173',
     'https://my-tube-git-main-sohaibs-projects-442454ff.vercel.app',
     'https://my-tube-red.vercel.app'
   ],

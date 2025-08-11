@@ -34,7 +34,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h1 className="text-3xl font-bold mb-4">Welcome to vidTwit</h1>
+      <h1 className="text-3xl text-white/90 font-bold mb-4">Welcome to vidTwit</h1>
 
       {loading ? (
         <p className="text-gray-400">Loading content...</p>

@@ -227,7 +227,7 @@ const ProfilePage = () => {
 
       {/* Channel Stats */}
       {stats && (
-        <div className="mt-10 bg-gradient-to-r from-[#595b5a] to-[#131217]  p-6 rounded-lg">
+        <div className="mt-10 bg-gradient-to-br from-gray-800 via-slate-900 to-black text-white/85 p-6 rounded-lg">
           <h2 className="text-xl font-semibold mb-4">Channel Stats</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-sm sm:text-base">
             <div>
@@ -252,15 +252,15 @@ const ProfilePage = () => {
 
       {/* Uploaded Videos */}
       {videos.length > 0 && (
-        <div className="mt-10">
-          <h2 className="text-xl font-semibold mb-4">Your Uploaded Videos</h2>
-          <div className="grid sm:grid-cols-2 gap-6">
+        <div className="mt-10 ">
+          <h2 className="text-xl font-semibold mb-4 text-white/90">Your Uploaded Videos</h2>
+          <div className="grid sm:grid-cols-2 gap-6 text-white/90">
             {videos.map(video => (
-              <div key={video._id} onClick={() => handleCardClick(video._id)} className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow relative cursor-pointer">
+              <div key={video._id} onClick={() => handleCardClick(video._id)} className=" bg-gray-800 p-4 rounded-lg shadow relative cursor-pointer">
                 <img
                   src={video.thumbnail || "/placeholder.jpg"}
                   alt={video.title}
-                  className="w-full h-40 object-cover rounded mb-2"
+                  className="w-full h-45 object-cover rounded mb-2"
                 />
                 <h3 className="font-semibold text-lg">{video.title}</h3>
                 <p className="text-sm text-gray-500">
@@ -300,7 +300,7 @@ const ProfilePage = () => {
           </div>
         </div>
       )}
-      <div className="px-4 py-6">
+      <div className="px-4 py-6  text-white">
         <h2 className="text-2xl font-bold mb-4">Watch History</h2>
         {history.length === 0 ? (
           <p>No watch history yet.</p>
@@ -314,7 +314,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Subscribed Channels */}
-      <div className="px-4 py-6">
+      <div className="px-4 py-6 text-white bg-gray-800">
         <h2 className="text-2xl font-bold mb-4">Channels You Subscribed To</h2>
         {subscribedChannels.length === 0 ? (
           <p className="text-gray-500">You haven’t subscribed to any channels yet.</p>
@@ -342,7 +342,7 @@ const ProfilePage = () => {
       </div>
 
       {/* My Subscribers */}
-      <div className="px-4 py-6">
+      <div className="px-4 py-6 text-white bg-gray-800">
         <h2 className="text-2xl font-bold mb-4">Your Subscribers</h2>
         {mySubscribers.length === 0 ? (
           <p className="text-gray-500">No one has subscribed to you yet.</p>
