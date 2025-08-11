@@ -106,11 +106,11 @@ if (!title || !description) {
   throw new ApiError(400, "Title and description are required");
 }
   const existingVideo = await Video.findOne({
-        $or:[{title},{description}]
-  })
-
+    title,
+    owner: req.user._id
+  });
   if (existingVideo) {
-    throw new ApiError(400, "Video with similar title or description already exists");
+    throw new ApiError(400, "You already have a video with this title");
   }
 
     const videoFileLocalPath = req.files?.videoFile?.[0]?.path
