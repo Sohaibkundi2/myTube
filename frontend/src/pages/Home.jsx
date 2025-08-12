@@ -150,7 +150,7 @@ export default function Home() {
               <div className="mt-4 space-y-1 text-sm text-gray-300">
                 <p className="text-sm text-muted-foreground">
                   Member Since:
-                  <span className="ml-1 font-medium text-black dark:text-white">
+                  <span className="ml-1 font-medium">
                     {dayjs(user.createdAt).format("DD MMMM YYYY")}
                   </span>
                 </p>

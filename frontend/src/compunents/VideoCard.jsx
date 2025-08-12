@@ -1,57 +1,51 @@
+import React from "react";
+import { Link } from "react-router-dom";
 
-import { useNavigate } from "react-router-dom";
+export default function VideoCard({ video }) {
+  const thumbnail = video?.thumbnail;
+  const videoUrl = video?.videoFile;
+  const videoId = video?._id;
+  const title = video?.title;
+  const channel = video?.owner?.username;
+  const views = video?.views || 0;
 
-
-const VideoCard = ({ video, currentUserId }) => {
-  if (!video) return null;
-
-  const {
-    _id,
-    title,
-    thumbnail,
-    owner,
-    views = 0,
-    createdAt,
-  } = video;
-
-  const navigate = useNavigate();
-   const handleCardClick = () => {
-    navigate(`/watch/${_id}`);
-  };
+  // Helper to check if desktop
+  const isDesktop = () => window.innerWidth >= 1024;
 
   return (
-    <div
-      className="relative group flex flex-col gap-4 w-full p-3 rounded-xl shadow hover:shadow-lg transition-shadow cursor-pointer text-white/90 bg-gray-800"
-      onClick={handleCardClick}
+    <Link
+      to={`/video/${videoId}`}
+      className="block bg-gray-900 rounded-lg overflow-hidden hover:shadow-lg transition"
     >
-      {/* Thumbnail */}
-      <img
-        src={thumbnail}
-        alt={title}
-        className="w-full h-60 object-cover rounded-md"
-      />
+      {/* Video or Thumbnail */}
+      {isDesktop() ? (
+        <video
+          src={videoUrl}
+          poster={thumbnail}
+          className="w-full h-60 object-cover"
+          preload="metadata"
+          muted
+          loop
+          onMouseEnter={(e) => e.target.play()}
+          onMouseLeave={(e) => {
+            e.target.pause();
+            e.target.currentTime = 0; // reset to start
+          }}
+        ></video>
+      ) : (
+        <img
+          src={thumbnail}
+          alt={title}
+          className="w-full h-60 object-cover"
+        />
+      )}
 
-      {/* Info */}
-      <div className="flex flex-col justify-start gap-2">
-        <h3 className="text-md font-semibold line-clamp-2">{title}</h3>
-
-        <div className="flex items-center gap-2">
-          <img
-            src={owner?.avatar || "/default-avatar.png"}
-            alt={owner?.username || "Uploader"}
-            className="w-8 h-8 rounded-full object-cover"
-          />
-          <span className="text-sm text-gray-400">
-            {owner?.username || "Unknown"}
-          </span>
-        </div>
-
-        <div className="text-xs text-gray-400">
-          {views} views • {new Date(createdAt).toLocaleDateString()}
-        </div>
+      {/* Info Section */}
+      <div className="p-3">
+        <h3 className="text-white font-semibold truncate">{title}</h3>
+        <p className="text-gray-400 text-sm">{channel}</p>
+        <p className="text-gray-500 text-xs">{views} views</p>
       </div>
-    </div>
+    </Link>
   );
-};
-
-export default VideoCard;
+}

@@ -1,6 +1,7 @@
 import { asyncHandler } from '../utils/asyncHandler.js'
 import ApiError from './../utils/ApiError.js'
 import { User } from '../models/user.model.js'
+import fs from 'fs'
 import {
   deleteFromCloudinary,
   uploadOnCloudinary,
@@ -38,6 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
   let avatar
   try {
     avatar = await uploadOnCloudinary(avatarLocalPath)
+    fs.unlinkSync(avatarLocalPath)
   } catch (error) {
     console.log('Error while uploading avatar', error)
     throw new ApiError(400, 'failed to upload avatar')
@@ -45,6 +47,7 @@ const registerUser = asyncHandler(async (req, res) => {
   let coverImage
   try {
     coverImage = await uploadOnCloudinary(coverLocalPath)
+    fs.unlinkSync(coverLocalPath)
   } catch (error) {
     console.log('Error while uploading coverImage', error)
     throw new ApiError(400, 'failed to upload coverImage')
@@ -285,6 +288,11 @@ const updateAvatarImage = asyncHandler(async (req, res) => {
   }
 
   const avatar = await uploadOnCloudinary(localFilePath)
+    try {
+    fs.unlinkSync(localFilePath);
+  } catch (err) {
+    console.error("Error deleting local file:", err);
+  }
 
   if (!avatar) {
     throw new ApiError(500, 'error while uploading image on cloadinary')
@@ -312,6 +320,12 @@ const updateCoverImage = asyncHandler(async (req, res) => {
   }
 
   const coverImage = await uploadOnCloudinary(localFilePath)
+
+  try {
+    fs.unlinkSync(localFilePath);
+  } catch (err) {
+    console.error("Error deleting local file:", err);
+  }
 
   if (!coverImage) {
     throw new ApiError(500, 'error while uploading image on cloadinary')

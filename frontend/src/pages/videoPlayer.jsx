@@ -149,6 +149,13 @@ export default function VideoPlayerPage() {
       const res = await getSubscribers(video.owner._id);
       setSubscribers(res.data?.data || []);
     } catch (err) {
+      if (err.response?.data?.message === "jwt expired") {
+        setMessage("Session expired. Please log in again.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+        return;
+      }
       const msg =
         err?.response?.data?.message || "Something went wrong while subscribing.";
       setMessage(msg)
@@ -241,6 +248,7 @@ export default function VideoPlayerPage() {
 
         {/* Title */}
         <h2 className="text-2xl font-bold">{video.title}</h2>
+        <h2 className="text-sm font-light">{video.description}</h2>
 
         {/* Like + Subscribe Actions */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
@@ -351,7 +359,7 @@ export default function VideoPlayerPage() {
                         type="text"
                         value={editedContent}
                         onChange={(e) => setEditedContent(e.target.value)}
-                        className="input input-sm w-full focus:outline-none focus:ring-1 focus:ring-green-300 focus:border-transparent sm:flex-1"
+                        className="input input-sm w-full focus:outline-none focus:ring-1 focus:ring-green-300 bg-gray-900 focus:border-transparent sm:flex-1"
                       />
                       <div className="flex sm:flex-col gap-2">
                         <button type="submit" className="btn btn-sm btn-success w-12 sm:w-auto">

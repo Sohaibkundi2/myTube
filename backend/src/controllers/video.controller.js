@@ -5,6 +5,7 @@ import ApiError from '../utils/ApiError.js'
 import {ApiResponse} from '../utils/ApiResponce.js'
 import { asyncHandler } from '../utils/asyncHandler.js'
 import { uploadOnCloudinary } from '../utils/cloudinary.js'
+import fs from 'fs'
 
 const getAllVideos = asyncHandler(async (req, res) => {
   const {
@@ -123,8 +124,10 @@ if (!title || !description) {
     let videoFileUrl, thumbnailUrl;
     try {
       videoFileUrl = await uploadOnCloudinary(videoFileLocalPath);
+      fs.unlinkSync(videoFileLocalPath);
       thumbnailUrl = await uploadOnCloudinary(thumbnailLocalPath);
-    }catch (error) {
+      fs.unlinkSync(thumbnailLocalPath);
+    } catch (error) {
       throw new ApiError(500, "Error uploading files to cloud storage");
     }
 
@@ -194,6 +197,7 @@ const updateVideo = asyncHandler(async (req, res) => {
     const uploadedThumbnail = await uploadOnCloudinary(thumbnailLocalPath);
     if (uploadedThumbnail?.url) {
       video.thumbnail = uploadedThumbnail.url;
+      fs.unlinkSync(thumbnailLocalPath);
     }
   }
 
