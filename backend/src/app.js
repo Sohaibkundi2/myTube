@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import mongoDB from './db/index.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express()
 dotenv.config()
@@ -16,10 +18,12 @@ app.use(cors({
   credentials: true
 }));
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
-app.use(express.static("Public"))
+app.use("/Public", express.static(path.join(__dirname, "../Public")))
 app.use(cookieParser())
 
 const PORT = process.env.PORT || 5000;
