@@ -34,12 +34,7 @@ const UpdateVideo = () => {
 
       setTimeout(() => navigate('/videos'), 1500);
     } catch (error) {
-      if (error.response?.data?.message === "jwt expired") {
-        setMessage("Session expired. Please log in again.");
-        setTimeout(() => navigate("/login"), 2000);
-      } else {
-        setMessage("Update failed. Please try again.");
-      }
+      setMessage('Failed to update video');
     } finally {
       setLoading(false);
     }

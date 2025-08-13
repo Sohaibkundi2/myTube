@@ -20,12 +20,6 @@ const DeleteVideo = () => {
       setTimeout(() => navigate('/videos'), 1500);
     } catch (error) {
       setMessage("Video not deleted");
-      if (error.response?.data?.message === "jwt expired") {
-        setMessage("Session expired. Please log in again.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
-      }
     } finally {
       setLoading(false);
     }

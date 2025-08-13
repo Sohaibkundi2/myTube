@@ -32,6 +32,14 @@ export default function Home() {
     fetchContent()
   }, [])
 
+  // Convert seconds to "mm:ss" format
+  const formatDuration = (seconds) => {
+    if (!seconds) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-3xl text-white/90 font-bold mb-4">Welcome to vidTwit</h1>
@@ -49,13 +57,25 @@ export default function Home() {
               <>
                 <ul className="space-y-4">
                   {videos.slice(0, 5).map((video) => (
-                    <li key={video._id} className="flex flex-col sm:flex-row  bg-gray-900 gap-3">
-                      <Link to={`/watch/${video._id}`} className="flex flex-col sm:flex-row gap-3 w-full hover:bg-gray-800 transition-all">
-                        <img
-                          src={video.thumbnail}
-                          alt={video.title}
-                          className="w-full sm:w-48 h-48 sm:h-28 object-cover rounded"
-                        />
+                    <li key={video._id} className="flex flex-col sm:flex-row bg-gray-900 gap-3 relative rounded">
+                      <Link
+                        to={`/watch/${video._id}`}
+                        className="flex flex-col sm:flex-row gap-3 w-full hover:bg-gray-800 transition-all relative"
+                      >
+                        <div className="relative w-full sm:w-48">
+                          <img
+                            src={video.thumbnail}
+                            alt={video.title}
+                            className="w-full h-48 sm:h-28 object-cover rounded"
+                          />
+                          {/* Duration overlay */}
+                          {video.duration && (
+                            <span className="absolute bottom-2 right-2 bg-gray-900 bg-opacity-70 text-white text-xs px-1.5 py-0.5 rounded">
+                              {formatDuration(video.duration)}
+                            </span>
+                          )}
+                        </div>
+
                         <div className="flex flex-col justify-between p-3">
                           <p className="font-medium text-base line-clamp-2">{video.title}</p>
                           <p className="text-sm text-gray-400 mt-1">
@@ -63,12 +83,13 @@ export default function Home() {
                               ? video.description.substring(0, 50) + '...'
                               : video.description}
                           </p>
-                          <p className="text-sm text-blue-500 mt-1 ">{video.owner?.username}</p>
+                          <p className="text-sm text-blue-500 mt-1">{video.owner?.username}</p>
                         </div>
                       </Link>
                     </li>
                   ))}
                 </ul>
+
                 {videos.length > 5 && (
                   <Link to="/videos" className="mt-4 inline-block text-blue-500 hover:underline">
                     View more videos →
@@ -92,9 +113,9 @@ export default function Home() {
                       <Link to={`/tweet/${tweet._id}`} className="block p-3 rounded border border-gray-600 bg-gray-900 hover:bg-gray-800 transition-all">
                         <p className=" font-medium text-blue-500">{tweet.owner?.username}</p>
                         <p className=" text-sm text-gray-400">{
-                        tweet.content.length > 180 
-                          ? tweet.content.substring(0, 180) + '...'
-                          : tweet.content
+                          tweet.content.length > 180
+                            ? tweet.content.substring(0, 180) + '...'
+                            : tweet.content
                         }</p>
                       </Link>
                     </li>

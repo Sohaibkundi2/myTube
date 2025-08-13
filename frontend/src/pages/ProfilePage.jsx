@@ -159,7 +159,7 @@ const ProfilePage = () => {
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-r from-[#9faaa6] to-[#29292c]" />
+          <div className="w-full h-full bg-gradient-to-br from-gray-950 via-slate-800 to-black" />
         )}
       </div>
 
@@ -202,12 +202,12 @@ const ProfilePage = () => {
 
             {showConfirm && (
               <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                <div className="bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-xl">
+                <div className="text-white bg-gray-800 p-6 rounded-lg shadow-xl">
                   <p className="text-lg font-semibold mb-4">Are you sure you want to logout?</p>
                   <div className="flex items-center justify-center gap-4">
                     <button
                       onClick={cancelLogout}
-                      className="bg-gray-300 dark:bg-gray-700 px-4 py-2 rounded"
+                      className="bg-gray-600 px-4 py-2 rounded"
                     >
                       Cancel
                     </button>
@@ -321,7 +321,7 @@ const ProfilePage = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {subscribedChannels.map((channel) => (
-              <div key={channel._id} className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow">
+              <div key={channel._id} className=" p-4 rounded-lg shadow">
                 <div className="flex items-center gap-4">
                   <img src={channel.avatar} alt={channel.username} className="w-12 h-12 rounded-full object-cover" />
                   <div>
@@ -349,7 +349,7 @@ const ProfilePage = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {mySubscribers.map((sub) => (
-              <div key={sub._id} className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow flex items-center gap-4">
+              <div key={sub._id} className="p-4 rounded-lg shadow flex items-center gap-4">
                 <img
                   src={sub.subscriber.avatar}
                   alt={sub.subscriber.username}

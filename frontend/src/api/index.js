@@ -15,6 +15,41 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+// Response interceptor for handling expired access tokens
+API.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // If 401 and not retried yet
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // Call your refresh token route (backend should return new access token)
+        const refreshRes = await API.post("/users/refresh-token"); 
+        const newAccessToken = refreshRes.data?.accessToken;
+
+        // Save new token in localStorage
+        localStorage.setItem("token", newAccessToken);
+
+        // Update original request headers
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        // Retry original request
+        return API(originalRequest);
+      } catch (refreshError) {
+        // If refresh fails, clear token and log out user
+        localStorage.removeItem("token");
+        window.location.href = "/login"; // redirect to login
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+
 //
 //  USER APIs
 //

@@ -149,13 +149,6 @@ export default function VideoPlayerPage() {
       const res = await getSubscribers(video.owner._id);
       setSubscribers(res.data?.data || []);
     } catch (err) {
-      if (err.response?.data?.message === "jwt expired") {
-        setMessage("Session expired. Please log in again.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
-        return;
-      }
       const msg =
         err?.response?.data?.message || "Something went wrong while subscribing.";
       setMessage(msg)
@@ -173,19 +166,7 @@ export default function VideoPlayerPage() {
       setComments((prev) => [res.data.data, ...prev]);
       setNewComment("");
     } catch (err) {
-
-      if (err.response?.data?.message === "jwt expired") {
-        setMessage("Session expired. Please log in again.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000)
-      }
-      if (err.response?.status === 401) {
-        setMessage("Please log in to continue.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000)
-      }
+      console.error("Comment failed", err);
     }
   };
 

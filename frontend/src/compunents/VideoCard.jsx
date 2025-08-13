@@ -8,14 +8,23 @@ export default function VideoCard({ video }) {
   const title = video?.title;
   const channel = video?.owner?.username;
   const views = video?.views || 0;
+  const duration = video?.duration;
 
-  // Helper to check if desktop
   const isDesktop = () => window.innerWidth >= 1024;
+
+  // Convert seconds to "mm:ss" format
+const formatDuration = (seconds) => {
+  if (!seconds) return "0:00";
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+};
+
 
   return (
     <Link
-      to={`/video/${videoId}`}
-      className="block bg-gray-900 rounded-lg overflow-hidden hover:shadow-lg transition"
+      to={`/watch/${videoId}`}
+      className="block bg-gray-900 rounded-lg overflow-hidden hover:shadow-lg transition relative"
     >
       {/* Video or Thumbnail */}
       {isDesktop() ? (
@@ -29,7 +38,7 @@ export default function VideoCard({ video }) {
           onMouseEnter={(e) => e.target.play()}
           onMouseLeave={(e) => {
             e.target.pause();
-            e.target.currentTime = 0; // reset to start
+            e.target.currentTime = 0;
           }}
         ></video>
       ) : (
@@ -38,6 +47,13 @@ export default function VideoCard({ video }) {
           alt={title}
           className="w-full h-60 object-cover"
         />
+      )}
+
+      {/* Duration Overlay */}
+      {duration && (
+        <span className="absolute top-50 right-3 bg-gray-900 bg-opacity-70 text-white text-xs px-1.5 py-0.5 rounded">
+           {formatDuration(video?.duration)}
+        </span>
       )}
 
       {/* Info Section */}

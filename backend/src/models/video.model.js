@@ -37,7 +37,9 @@ const videoSchema =new Schema({
     owner:{
         type:mongoose.Types.ObjectId,
         ref:"User"
-    }
+    },
+    viewedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+
 },{timestamps:true})
 
 videoSchema.plugin(mongooseAggregatePaginate);

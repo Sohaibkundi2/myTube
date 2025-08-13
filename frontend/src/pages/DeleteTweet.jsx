@@ -20,18 +20,6 @@ const DeleteTweet = () => {
       setTimeout(() => navigate('/tweets'), 1500);
     } catch (error) {
       setMessage("tweet not deleted");
-      if (error.response?.data?.message === "jwt expired") {
-        setMessage("Session expired. Please log in again.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000)  
-      }
-      if (error.response?.status === 401) {
-        setMessage("Please log in to continue.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000)  
-      }
     } finally {
       setLoading(false);
     }

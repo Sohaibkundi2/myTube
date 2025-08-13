@@ -40,12 +40,7 @@ const UpdateTweet = () => {
       setTimeout(() => navigate('/tweets'), 1500);
     } catch (error) {
       console.error(error);
-      if (error.response?.data?.message === 'jwt expired') {
-        setMessage('Session expired. Please log in again.');
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      }
+        setMessage('Failed to update tweet');
     } finally {
       setLoading(false);
     }

@@ -37,14 +37,7 @@ const UploadTweet = () => {
                 navigate("/");
             }, 1500);
         } catch (error) {
-            if (error.response?.data?.message === "jwt expired") {
-                setMessage("Session expired. Please log in again.");
-                setTimeout(() => {
-                    navigate("/login");
-                }, 2000);
-            } else {
-                setMessage("Upload failed.");
-            }
+            setMessage("Upload failed.");
         } finally {
             setLoading(false);
         }
