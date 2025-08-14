@@ -7,14 +7,14 @@ import {
   uploadOnCloudinary,
 } from '../utils/cloudinary.js'
 import { ApiResponse } from '../utils/ApiResponce.js'
-import  jwt  from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose'
 
 const registerUser = asyncHandler(async (req, res) => {
   const { username, fullName, email, password } = req.body || {}
 
   //validatiom
-  
+
   if (
     [username, fullName, email, password].some(field => field?.trim() === '')
   ) {
@@ -39,7 +39,9 @@ const registerUser = asyncHandler(async (req, res) => {
   let avatar
   try {
     avatar = await uploadOnCloudinary(avatarLocalPath)
-    fs.unlinkSync(avatarLocalPath)
+    if (fs.existsSync(avatarLocalPath)) {
+      fs.unlinkSync(avatarLocalPath)
+    }
   } catch (error) {
     console.log('Error while uploading avatar', error)
     throw new ApiError(400, 'failed to upload avatar')
@@ -47,7 +49,9 @@ const registerUser = asyncHandler(async (req, res) => {
   let coverImage
   try {
     coverImage = await uploadOnCloudinary(coverLocalPath)
-    fs.unlinkSync(coverLocalPath)
+    if (fs.existsSync(coverLocalPath)) {
+      fs.unlinkSync(coverLocalPath)
+    }
   } catch (error) {
     console.log('Error while uploading coverImage', error)
     throw new ApiError(400, 'failed to upload coverImage')
@@ -81,7 +85,7 @@ const registerUser = asyncHandler(async (req, res) => {
       .status(201)
       .json(new ApiResponse(201, createdUser, 'user created successfully'))
   } catch (error) {
-      console.error("User creation failed:", error);
+    console.error('User creation failed:', error)
     if (coverImage) {
       await deleteFromCloudinary(coverImage.public_id)
     }
@@ -268,12 +272,16 @@ const changeAccountDetails = asyncHandler(async (req, res) => {
     throw new ApiError(401, 'all fields are required')
   }
 
-  const user = await User.findByIdAndUpdate(req.user._id, {
-    $set: {
-      fullName,
-      email,
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        fullName,
+        email,
+      },
     },
-  }, { new: true }).select('-password')
+    { new: true },
+  ).select('-password')
 
   return res
     .status(200)
@@ -288,10 +296,12 @@ const updateAvatarImage = asyncHandler(async (req, res) => {
   }
 
   const avatar = await uploadOnCloudinary(localFilePath)
-    try {
-    fs.unlinkSync(localFilePath);
+  try {
+    if (fs.existsSync(localFilePath)) {
+      fs.unlinkSync(localFilePath)
+    }
   } catch (err) {
-    console.error("Error deleting local file:", err);
+    console.error('Error deleting local file:', err)
   }
 
   if (!avatar) {
@@ -322,9 +332,11 @@ const updateCoverImage = asyncHandler(async (req, res) => {
   const coverImage = await uploadOnCloudinary(localFilePath)
 
   try {
-    fs.unlinkSync(localFilePath);
+    if (fs.existsSync(localFilePath)) {
+      fs.unlinkSync(localFilePath)
+    }
   } catch (err) {
-    console.error("Error deleting local file:", err);
+    console.error('Error deleting local file:', err)
   }
 
   if (!coverImage) {

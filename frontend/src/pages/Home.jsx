@@ -45,7 +45,10 @@ export default function Home() {
       <h1 className="text-3xl text-white/90 font-bold mb-4">Welcome to vidTwit</h1>
 
       {loading ? (
-        <p className="text-gray-400">Loading content...</p>
+        <p className="text-gray-400">Loading content {" "}
+        <span className="loading loading-bars loading-xs"></span>
+        </p>
+        
       ) : (
         <div className="grid bg grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
           {/* Videos Section */}

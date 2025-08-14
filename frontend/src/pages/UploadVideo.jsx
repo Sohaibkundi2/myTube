@@ -20,7 +20,7 @@ const UploadVideo = () => {
       return;
     }
 
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; 
+    const MAX_FILE_SIZE = 15 * 1024 * 1024; //15mb
     if (video.size > MAX_FILE_SIZE) {
       setMessage("File size exceeds 10MB limit.");
       return;
@@ -112,6 +112,7 @@ const UploadVideo = () => {
             id="video"
             type="file"
             accept="video/*"
+            name="videoFile"
             onChange={(e) => setVideo(e.target.files[0])}
             className="hidden"
             required
@@ -131,6 +132,7 @@ const UploadVideo = () => {
             id="thumbnail"
             type="file"
             accept="image/*"
+            name="thumbnail"
             onChange={(e) => setThumbnail(e.target.files[0])}
             className="hidden"
             required

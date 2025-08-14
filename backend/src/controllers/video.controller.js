@@ -122,9 +122,13 @@ const publishAVideo = asyncHandler(async (req, res) => {
   let videoFileUrl, thumbnailUrl
   try {
     videoFileUrl = await uploadOnCloudinary(videoFileLocalPath)
-    fs.unlinkSync(videoFileLocalPath)
+    if (fs.existsSync(videoFileLocalPath)) {
+      fs.unlinkSync(videoFileLocalPath)
+    }
     thumbnailUrl = await uploadOnCloudinary(thumbnailLocalPath)
-    fs.unlinkSync(thumbnailLocalPath)
+    if (fs.existsSync(thumbnailLocalPath)) {
+      fs.unlinkSync(thumbnailLocalPath)
+    }
   } catch (error) {
     throw new ApiError(500, 'Error uploading files to cloud storage')
   }
@@ -203,7 +207,9 @@ const updateVideo = asyncHandler(async (req, res) => {
     const uploadedThumbnail = await uploadOnCloudinary(thumbnailLocalPath)
     if (uploadedThumbnail?.url) {
       video.thumbnail = uploadedThumbnail.url
-      fs.unlinkSync(thumbnailLocalPath)
+      if (fs.existsSync(thumbnailLocalPath)) {
+        fs.unlinkSync(thumbnailLocalPath)
+      }
     }
   }
 

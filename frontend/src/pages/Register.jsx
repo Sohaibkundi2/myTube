@@ -103,6 +103,7 @@ export default function Register() {
             </label>
             <input
               type="file"
+              name="avatar"
               accept="image/*"
               onChange={e => setAvatar(e.target.files[0])}
               className="file-input file-input-bordered w-full"
@@ -116,6 +117,7 @@ export default function Register() {
             <input
               type="file"
               accept="image/*"
+              name="coverImage"
               onChange={e => setCoverImage(e.target.files[0])}
               className="file-input file-input-bordered w-full"
             />

@@ -87,6 +87,7 @@ const UpdateVideo = () => {
             id="thumbnail"
             type="file"
             accept="image/*"
+            name='thumbnail'
             onChange={(e) => setThumbnail(e.target.files[0])}
             className="w-full text-white"
           />
