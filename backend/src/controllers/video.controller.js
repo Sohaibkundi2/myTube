@@ -154,31 +154,43 @@ const publishAVideo = asyncHandler(async (req, res) => {
 })
 
 const getVideoById = asyncHandler(async (req, res) => {
-  const { videoId } = req.params
+  const { videoId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(videoId)) {
-    throw new ApiError(400, 'Invalid video ID')
+    throw new ApiError(400, 'Invalid video ID');
   }
 
   const video = await Video.findById(videoId).populate(
     'owner',
     'username fullName avatar',
-  )
+  );
 
   if (!video) {
-    throw new ApiError(404, 'Video not found')
+    throw new ApiError(404, 'Video not found');
   }
 
-  if (req.user && !video.viewedBy.some(id => id.toString() === req.user._id.toString())) {
+  // ✅ If user is logged in
+  if (req.user) {
+    const alreadyViewed = video.viewedBy.some(
+      (id) => id.toString() === req.user._id.toString()
+    );
+
+    if (!alreadyViewed) {
+      video.views += 1;
+      video.viewedBy.push(req.user._id);
+      await video.save({ validateBeforeSave: false }); // skip validations for speed
+    }
+  } else {
+    // ✅ If user is not logged in, still increase view count
     video.views += 1;
-    video.viewedBy.push(req.user._id);
-    await video.save();
+    await video.save({ validateBeforeSave: false });
   }
 
   return res
     .status(200)
-    .json(new ApiResponse(200, video, 'Video fetched successfully'))
-})
+    .json(new ApiResponse(200, video, 'Video fetched successfully'));
+});
+
 
 const updateVideo = asyncHandler(async (req, res) => {
   const { videoId } = req.params

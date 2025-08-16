@@ -20,9 +20,9 @@ const UploadVideo = () => {
       return;
     }
 
-    const MAX_FILE_SIZE = 15 * 1024 * 1024; //15mb
+    const MAX_FILE_SIZE = 20 * 1024 * 1024; //20mb
     if (video.size > MAX_FILE_SIZE) {
-      setMessage("File size exceeds 10MB limit.");
+      setMessage("File size exceeds 20MB limit.");
       return;
     }
 

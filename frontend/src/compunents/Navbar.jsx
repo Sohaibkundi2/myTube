@@ -117,7 +117,6 @@ export default function Navbar() {
             {user ? (
               <>
                 <li><Link to="/profile">Profile</Link></li>
-                <li><Link to="/update-profile">Change Profile</Link></li>
                 <li>
                   <button
                     onClick={handleLogoutClick}

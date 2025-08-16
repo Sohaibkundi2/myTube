@@ -151,7 +151,7 @@ const ProfilePage = () => {
   return (
     <div className="max-w-5xl mx-auto px-4">
       {/* Cover Image */}
-      <div className="h-52 sm:h-64 w-full rounded-lg overflow-hidden mb-6">
+      <div className="w-full h-40 sm:h-60 md:h-72 lg:h-80 rounded-lg shadow-md overflow-hidden">
         {profile.coverImage ? (
           <img
             src={profile.coverImage}
